@@ -5,11 +5,11 @@ import Theme from "../theme/theme";
 export default function Document({ children }: { children: React.ReactNode; }) {
     return (
         <html lang={`en`} className={`quizListHTML`}>
-            <Theme>
-                <>
+            <body>
+                <Theme>
                     {children}
-                </>
-            </Theme>
+                </Theme>
+            </body>
         </html>
     )
 }

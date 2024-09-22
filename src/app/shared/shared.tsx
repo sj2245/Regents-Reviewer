@@ -12,7 +12,8 @@ export default function SharedData({ children }: { children: React.ReactNode; })
 
   return <>
     <SharedDatabase.Provider value={{ 
-        user, setUser, darkMode, setDarkMode,
+        user, setUser, 
+        darkMode, setDarkMode,
     }}>
         {children}
     </SharedDatabase.Provider>
