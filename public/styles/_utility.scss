@@ -48,6 +48,8 @@
 .m0auto { margin: 0 auto; }
 .pl3 { padding-left: 3px; }
 .pl5 { padding-left: 5px; }
+.pl10 { padding-left: 10px; }
+.pl15 { padding-left: 15px; }
 .m50t { margin-top: 50px; }
 .m75t { margin-top: 75px; }
 .m10l { margin-left: 10px; }
@@ -77,7 +79,6 @@
 .mb25 { margin-bottom: 25px; }
 .mb30 { margin-bottom: 30px; }
 .mb35 { margin-bottom: 35px; }
-.simpleFlex { display: flex; }
 .textLeft { text-align: left };
 .mrauto { margin-right: auto; }
 .mh100vh { min-height: 100vh; }
@@ -138,19 +139,23 @@
   max-width: fit-content;
 }
 
+.flex {
+  display: flex;
+}
+
+.flexed {
+  width: 100%;
+  @extend .flex;
+  max-width: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
 .center {
   margin: 0 auto;
   text-align: center;
   align-items: center !important;
   justify-content: center !important;
-}
-
-.flex {
-  width: 100%;
-  max-width: 100%;
-  align-items: center;
-  @extend .simpleFlex;
-  justify-content: center;
 }
 
 .grow { flex-grow: 1; }
@@ -167,9 +172,9 @@
 .alignCenter { align-items: center; }
 .start { justify-content: flex-start; }
 .alignStart { align-items: flex-start; }
+.justifyCenter { justify-content: center; }
 .column { flex-direction: column !important; }
 .spaceBetween { justify-content: space-between; }
-
 .flexCenter {
   align-items: center;
   justify-content: center;
@@ -206,7 +211,7 @@
 }
 
 .hoverLink {
-  display: flex;
+  @extend .flex;
   grid-gap: 0.3em;
   position: relative;
   align-items: center;
