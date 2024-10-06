@@ -193,8 +193,9 @@ export const SpreadSheetQuestions = [
       "Alyssa said II and III because they each have three terms."
     ]
   }),
-]
+];
 
+console.log(`Spread Sheet Questions`, SpreadSheetQuestions);
 
 export default function SharedData({ children }: { children: React.ReactNode; }) {
 

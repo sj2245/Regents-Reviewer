@@ -14,7 +14,7 @@ export class PageProps {
 
 export default function Page({ title, desc = description, children }: PageProps) {
   return (
-    <body className={`flex`}>
+    <body className={`regentsReviewerBody dark flex`}>
         {/* Page Head */}
         <HelmetProvider>
             <Helmet>
