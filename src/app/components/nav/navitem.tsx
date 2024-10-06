@@ -1,21 +1,25 @@
+import { Button } from "@mui/material";
+
 export type NavItemProps = {
+  icon?: any;
   link?: string;
   name?: string;
   fontSize?: number | string;
-  // hoverFontSize?: number | string;
 }
 
 export default function NavItem({
-  link = `#`,
-  name = `Home`,
+  icon,
+  link,
   fontSize = 16,
-  // hoverFontSize = (fontSize as any) * 1.25,
+  name = `Home`,
 }: NavItemProps) {
   return (
     <li>
-      <a href={link} style={{ fontSize }}>
-        {name}
-      </a>
+      <Button>
+        <a href={link} className={`navItem flex gap5 alignCenter borderRadius ${link ? `` : `label`}`} style={{ fontSize, padding: `15px 15px 15px 7px` }}>
+          {icon} {name}
+        </a>
+      </Button>
     </li>
   )
 }
