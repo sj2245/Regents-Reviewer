@@ -12,16 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode; })
   return <>
     <SharedData>
       <html lang={`en`}>
-        <body className={`flex`}>
-          <Theme>
-            <Sidebar style={{ maxWidth: 250 }} />
-            <main className={`main w100 flex column gap5 spaceBetween alignCenter`}>
-              <Header />
-              {children}
-              <Footer />
-            </main>
-          </Theme>
-        </body>
+        <Theme>
+          {children}
+        </Theme>
       </html>
     </SharedData>
   </>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { brandName } from "@/app/shared/shared";
+import { brandName, logoURL } from "@/app/shared/shared";
 
 export type LogoOptions = {
     src?: string;
@@ -11,10 +11,10 @@ export type LogoOptions = {
 
 export default function Logo({
     fontSize = 18,
+    src = logoURL,
     fontWeight = 600,
     label = brandName,
     className = `logo`,
-    src = `/images/logos/QuizListLogo.svg`,
 }: LogoOptions) {
     return (
         <div className={`logoContainer ${className} flex alignCenter start gap10`} style={{ fontWeight }}>

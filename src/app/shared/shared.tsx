@@ -4,8 +4,11 @@ import React from "react";
 import { uniqueId } from "lodash";
 import { createContext, useState } from "react";
 
-export const brandName = `Regents Reviewer`;
 export const SharedDatabase = createContext({});
+
+export const brandName = `Regents Reviewer`;
+export const logoURL = `/images/logos/QuizListLogo.svg`;
+export const description = `${brandName} is an app to make and take quizzes.`;
 
 export const Difficulties = {
   Easy: `Easy`,
