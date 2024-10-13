@@ -10,7 +10,7 @@ export default function Nav({
   style
 }: NavOptions) {
   return (
-    <nav className={`sidebarContainer spaceBetween h100 gap15 flex column`} style={style}>
+    <nav className={`sidebarContainer h100 gap15 flex column`} style={style}>
       <Logo />
       <NavMenu />
     </nav>

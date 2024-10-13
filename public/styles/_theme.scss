@@ -90,8 +90,13 @@ body {
 }
 
 aside {
-  min-height: var(--minHeight);
-  background: var(--cardBg);
+    background: var(--cardBg);
+    min-height: var(--minHeight);
+    transition: var(--transition);
+    &.collapsed {
+        width: 100px !important;
+        // Hide Text in Nav Here
+    }
 }
 
 header, footer {

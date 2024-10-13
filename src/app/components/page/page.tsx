@@ -2,7 +2,7 @@
 
 import Footer from "../footer/footer";
 import Header from "../header/header";
-import Sidebar from "../sidebar/sidebar";
+import Sidebar, { sidebarWidth } from "../sidebar/sidebar";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { brandName, logoURL, description } from "@/app/shared/shared";
 
@@ -10,9 +10,15 @@ export class PageProps {
     children: any;
     title: string = `Home`;
     desc?: string = description;
+    showSidebar?: boolean = true;
 }
 
-export default function Page({ title, desc = description, children }: PageProps) {
+export default function Page({ 
+    title,
+    children,
+    desc = description,
+    showSidebar = true, 
+}: PageProps) {
   return (
     <body className={`regentsReviewerBody dark flex`}>
         {/* Page Head */}
@@ -29,7 +35,7 @@ export default function Page({ title, desc = description, children }: PageProps)
             </Helmet>
         </HelmetProvider>
         {/* Page Content */}
-        <Sidebar style={{ maxWidth: 250 }} />
+        {showSidebar ? <Sidebar style={{ maxWidth: sidebarWidth }} expanded={true} /> : <></>}
         <main className={`main w100 flex column gap5 spaceBetween alignCenter`}>
             <Header />
             {children}
