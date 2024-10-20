@@ -19,7 +19,7 @@ export default function Logo({
     return (
         <div className={`logoContainer ${className} flex alignCenter start gap10`} style={{ fontWeight }}>
             <Image src={src} alt={`Logo`} width={27} height={27} />
-            <label style={{ fontSize }}>
+            <label className={`labelText`} style={{ fontSize }}>
                 {label}
             </label>
         </div>

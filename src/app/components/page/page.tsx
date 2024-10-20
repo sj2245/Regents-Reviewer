@@ -24,7 +24,7 @@ export default function Page({
         {/* Page Head */}
         <HelmetProvider>
             <Helmet>
-                <title>{title} | {brandName}</title>
+                <title>{`${title} | ${brandName}`}</title>
                 <link rel={`manifest`} href={`/manifest.json`} />
                 <meta name={`theme-color`} content={`#000000`} />
                 <meta name={`description`} content={description} />

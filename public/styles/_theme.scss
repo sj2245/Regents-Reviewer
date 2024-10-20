@@ -89,13 +89,19 @@ body {
   font-size: var(--defaultFontSize) !important;
 }
 
+// Sidebar
 aside {
     background: var(--cardBg);
     min-height: var(--minHeight);
     transition: var(--transition);
     &.collapsed {
         width: 100px !important;
-        // Hide Text in Nav Here
+        .menuLogo {
+            justify-content: center;
+        }
+       .labelText {
+            display: none;
+       }
     }
 }
 

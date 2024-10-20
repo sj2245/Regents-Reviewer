@@ -14,12 +14,19 @@ export default function NavItem({
   name = `Home`,
 }: NavItemProps) {
   return (
-    <li>
+   link ? (
+     <li>
       <Button>
         <a href={link} className={`navItem flex gap5 alignCenter borderRadius ${link ? `` : `label`}`} style={{ fontSize, padding: `15px 15px 15px 7px` }}>
-          {icon} {name}
+          {icon}
+          <span className={`labelText`}>{name}</span>
         </a>
       </Button>
-    </li>
+      </li >
+   ) : <>
+      <li>
+        <span style={{ fontSize, padding: `15px 15px 15px 7px` }} className={`labelText`}>{name}</span>
+      </li >
+   </>
   )
 }
