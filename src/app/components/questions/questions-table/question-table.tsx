@@ -1,7 +1,7 @@
 'use client'
 
 import Table from '../../table/table'; 
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { SharedDatabase } from '@/app/shared/shared';
 
 export default function QuestionTable() {
@@ -18,9 +18,11 @@ export default function QuestionTable() {
     { field: `explanation`, headerName: `Explanation`, width: 433, editable: true, },
   ])
 
-  console.log(`Questions:`, questions)
+  useEffect(() => {
+    console.log(`Questions:`, questions);
+  }, [questions])
 
   return (
-    <Table columns={questionColumns} rows={questions} />
+    <Table columns={questionColumns} rows={questions} pageSize={10} />
   )
 }

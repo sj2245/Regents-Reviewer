@@ -114,6 +114,65 @@ header, footer {
   background: var(--cardBg);
 }
 
+@mixin container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@mixin formField {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 5px 10px;
+    border-radius: var(--borderRadius);
+    font-family: var(--font) !important;
+}
+
+.container {
+    @include container;
+   &.wrapper {
+    height: 100%;
+    grid-gap: 25px;
+   }
+}
+
+.formGroup {
+    padding: 15px;
+    grid-gap: 15px;
+    max-width: 75%;
+    background: var(--iconLeft);
+    border-radius: var(--borderRadius);
+}
+
+form {
+    grid-gap: 15px;
+    button {
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 1.25em;
+        @include formField;
+        color: var(--darkMain);
+        transition: var(--transition);
+        &:hover {
+            color: white;
+           background: var(--darkMain);
+        }
+    }
+}
+
+.formTitle {
+    margin: 5px 0;
+    font-size: 1.75em;
+}
+
+input {
+    font-size: 1.5em;
+    @include formField;
+}
+
 ul {
   list-style: none;
 }

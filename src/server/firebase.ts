@@ -1,10 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
-// import { GoogleAuthProvider, getAuth } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 
-// const provider = new GoogleAuthProvider();
-// provider.setCustomParameters({ prompt: 'select_account' });
-// export const googleProvider = provider;
+const provider = new GoogleAuthProvider();
+provider.setCustomParameters({ prompt: 'select_account' });
+export const googleProvider = provider;
 
 const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_APPID,
@@ -17,5 +17,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 
 export default app;

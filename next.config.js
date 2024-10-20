@@ -9,6 +9,7 @@ const nextConfig = withPWA({
   reactStrictMode: true,
   async rewrites() {
     return [
+      { source: `/quiz`, destination: `/pages/quiz` },
       { source: `/about`, destination: `/pages/about` },
       { source: `/signin`, destination: `/pages/signin` },
       { source: `/signup`, destination: `/pages/signup` },
@@ -42,7 +43,7 @@ const nextConfig = withPWA({
       { source: `/alerts`, destination: `/notifications`, permanent: true },
       { source: `/notification`, destination: `/notifications`, permanent: true },
       // Questions
-      { source: `/quiz`, destination: `/questions`, permanent: true },
+      // { source: `/quiz`, destination: `/questions`, permanent: true },
       { source: `/question`, destination: `/questions`, permanent: true },
       // About
       { source: `/info`, destination: `/about`, permanent: true },
