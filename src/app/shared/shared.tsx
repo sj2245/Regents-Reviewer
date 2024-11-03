@@ -1,6 +1,7 @@
 'use client';
 
 import React from "react";
+import { User } from "./types/User";
 import { Question } from "./types/Question";
 import { createContext, useState } from "react";
 import { SpreadSheetQuestions } from "./database/sample-questions";
@@ -15,9 +16,10 @@ export default function SharedData({ children }: { children: React.ReactNode; })
 
   // General app things
   let [beta, setBeta] = useState(false);
-  let [user, setUser] = useState<any>(null);
+  let [users, setUsers] = useState<User[]>()
   let [loading, setLoading] = useState(false);
   let [darkMode, setDarkMode] = useState(true);
+  let [user, setUser] = useState<User | null>(null);
 
   // Specific items
   let [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
@@ -27,6 +29,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     <SharedDatabase.Provider value={{ 
       user, setUser, 
       beta, setBeta,
+      users, setUsers,
       loading, setLoading,
       darkMode, setDarkMode,
       questions, setQuestions,

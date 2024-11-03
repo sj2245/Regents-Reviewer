@@ -1,7 +1,10 @@
 'use client';
 
+import "react-toastify/dist/ReactToastify.css";
+
 import Footer from "../footer/footer";
 import Header from "../header/header";
+import { ToastContainer } from "react-toastify";
 import Sidebar, { sidebarWidth } from "../sidebar/sidebar";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { brandName, logoURL, description } from "@/app/shared/shared";
@@ -38,6 +41,18 @@ export default function Page({
         {showSidebar ? <Sidebar style={{ maxWidth: sidebarWidth }} expanded={true} /> : <></>}
         <main className={`main w100 flex column gap5 spaceBetween alignCenter`}>
             <Header />
+            <ToastContainer
+                hideProgressBar={false}
+                position={`top-right`}
+                pauseOnHover={false}
+                newestOnTop={false}
+                autoClose={3500}
+                pauseOnFocusLoss
+                theme={`dark`}
+                closeOnClick
+                rtl={false}
+                draggable
+            />
             {children}
             <Footer />
         </main>

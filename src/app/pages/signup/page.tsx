@@ -1,13 +1,19 @@
 'use client';
 
-import { auth } from "@/server/firebase";
+import { useContext } from "react";
+import { toast } from "react-toastify";
 import Page from "@/app/components/page/page";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { User } from "@/app/shared/types/User";
+import { addUser, auth } from "@/server/firebase";
+import { SharedDatabase } from "@/app/shared/shared";
+import { createUserWithEmailAndPassword} from "firebase/auth";
 
 export default function SignUp({
   title = `Sign Up`,
   className = `signup`,
 }: any) {
+
+  let { users } = useContext<any>(SharedDatabase);
 
   const onSignUp = (e?: any) => {
     e.preventDefault();
@@ -18,17 +24,22 @@ export default function SignUp({
     email = email.value;
     password = password.value;
 
-    let usr = {
-      email,
-      password,
-    }
-
-    console.log(`On Sign Up`, {
-      e,
-      usr
+    createUserWithEmailAndPassword(auth, email, password).then(fireBaseUserCred => {
+      let { uid } = fireBaseUserCred?.user;
+      let usersLength = users ? users?.length : 0;
+      let index = usersLength + 1;
+      let newUser = new User({
+        email,
+        index,
+        uid,
+      });
+      addUser(newUser);
+      toast.success(`User Created`);
+      form.reset();
+    }).catch(fireBaseCreateUserError => {
+      console.log(`Firebase Create User Error`, fireBaseCreateUserError);
+      return;
     });
-
-    signInWithEmailAndPassword(auth, email, password);
   }
 
   return (
