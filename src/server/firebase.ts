@@ -42,9 +42,9 @@ export const userConverter = {
   }
 }
 
+export const usersDatabaseCollection = environment + DatabaseTableNames.users;
 export const addUser = async (usr: User) => {
-  let environmentDBName = environment + DatabaseTableNames.users;
-  const userReference = doc(db, environmentDBName, usr?.id).withConverter(userConverter);
+  const userReference = doc(db, usersDatabaseCollection, usr?.id).withConverter(userConverter);
   await setDoc(userReference, usr as User);
 };
 
