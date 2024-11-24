@@ -36,6 +36,7 @@ export default function SignUp({
       addUser(newUser);
       toast.success(`User Created`);
       form.reset();
+      window.location.href = `/signin`;
     }).catch(fireBaseCreateUserError => {
       toast.error(`Failed to Create User`);
       console.log(`Firebase Create User Error`, fireBaseCreateUserError);

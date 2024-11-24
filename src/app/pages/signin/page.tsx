@@ -32,8 +32,8 @@ export default function SignIn({
         if (userFromDB) {
           setUser(userFromDB);
           toast.success(`Sign In as ${userFromDB?.email}`);
-          // window.open(`/`);
           form.reset();
+          window.location.href = `/`;
         } else {
           toast.error(`User does not exist`);
         }

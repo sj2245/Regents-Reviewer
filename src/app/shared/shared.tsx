@@ -32,6 +32,21 @@ export default function SharedData({ children }: { children: React.ReactNode; })
   let [questions, setQuestions] = useState<Question[]>(SpreadSheetQuestions);
 
   useEffect(() => {
+    if (user != null) {
+      localStorage.setItem(`user`, JSON.stringify(user))1
+    }
+  }, [user])
+
+  useEffect(() => {
+    // Check For Stored User
+    const hasStoredUser = localStorage.getItem(`user`);
+    if (hasStoredUser) {
+      const storedUser = JSON.parse(hasStoredUser);
+      if (storedUser) {
+        setUser(storedUser);
+      }
+    }
+
     // Database Tables
     const usersCollection = collection(db, usersDatabaseCollection);
     const questionsCollection = collection(db, DatabaseTableNames.questions);
