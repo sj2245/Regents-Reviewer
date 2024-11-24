@@ -33,7 +33,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
 
   useEffect(() => {
     if (user != null) {
-      localStorage.setItem(`user`, JSON.stringify(user))1
+      localStorage.setItem(`user`, JSON.stringify(user));
     }
   }, [user])
 
