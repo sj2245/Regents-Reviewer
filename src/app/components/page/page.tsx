@@ -9,7 +9,7 @@ import Sidebar, { sidebarWidth } from "../sidebar/sidebar";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { brandName, logoURL, description } from "@/app/shared/shared";
 
-export class PageProps {
+class PageProps {
     children: any;
     title: string = `Home`;
     desc?: string = description;

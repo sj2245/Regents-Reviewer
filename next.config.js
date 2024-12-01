@@ -11,6 +11,7 @@ const nextConfig = withPWA({
     return [
       { source: `/quiz`, destination: `/pages/quiz` },
       { source: `/about`, destination: `/pages/about` },
+      { source: `/table`, destination: `/pages/table` },
       { source: `/signin`, destination: `/pages/signin` },
       { source: `/signup`, destination: `/pages/signup` },
       { source: `/contact`, destination: `/pages/contact` },
@@ -45,6 +46,9 @@ const nextConfig = withPWA({
       // Questions
       // { source: `/quiz`, destination: `/questions`, permanent: true },
       { source: `/question`, destination: `/questions`, permanent: true },
+      { source: `/db`, destination: `/table`, permanent: true },
+      { source: `/tabl`, destination: `/table`, permanent: true },
+      { source: `/database`, destination: `/table`, permanent: true },
       // About
       { source: `/info`, destination: `/about`, permanent: true },
       { source: `/aboutus`, destination: `/about`, permanent: true },

@@ -20,7 +20,7 @@ export default function NavMenu() {
     <ul className={`navMenu flex column gap5 p0 pl15`}>
       <NavItem name={`Home`} />
       <NavItem name={brandName} link={`/`} icon={<IconQuestionMark color={`var(--iconRight)`} />} />
-      <NavItem name={`Questions Database`} link={`/`} icon={<IconLayoutDashboard color={`var(--iconRight)`} />} />
+      <NavItem name={`Questions Database`} link={`/table`} icon={<IconLayoutDashboard color={`var(--iconRight)`} />} />
       {user != null ? <>
         <div onClick={(e) => logOut(e)}>
           <NavItem name={`${user != null ? user?.displayName : `User`}, Log Out?`} link={`#`} icon={<IconLogout color={`var(--iconRight)`} />} />

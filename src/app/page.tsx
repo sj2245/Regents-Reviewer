@@ -1,10 +1,10 @@
 import Page from "./components/page/page";
-import QuestionTable from "./components/questions/questions-table/question-table";
+import QuestionCards from "./components/questions/questions-cards/question-cards";
 
 export default function Home() {
   return (
     <Page title={`Home`} desc={`This is the Home Page`} showSidebar={true}>
-      <QuestionTable />
+      <QuestionCards />
     </Page>
   )
 }

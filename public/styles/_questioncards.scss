@@ -1,0 +1,51 @@
+.questionCards {
+  gap: 35px;
+  width: 95%;
+  display: grid;
+  margin: 0 auto;
+  overflow: auto;
+  max-height: 800px;
+  grid-template-columns: auto auto auto;
+  .questionCard {
+    padding: 0;
+    display: flex;
+    overflow: hidden;
+    font-size: 1.4em;
+    line-height: 1.4em;
+    border-radius: 15px;
+    flex-direction: column;
+    border: solid 1px white;
+    justify-content: space-evenly;
+    .questionAndTopics {
+      display: flex;
+      grid-gap: 10px;
+      padding: 10px 15px;
+      flex-direction: column;
+      border-top-left-radius: 15px;
+      border-top-right-radius: 15px;
+      .question {
+        font-weight: bold;
+      }
+      .questionTopics {
+        font-style: italic;
+      }
+    }
+    .questionChoices {
+      gap: 10px;
+      display: grid;
+      padding: 10px 15px;
+      align-items: center;
+      justify-content: center;
+      grid-template-columns: 50% 50%;
+      .choiceButton {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 1.2em;
+        line-height: 1.2em;
+        border-radius: 15px;
+        background: var(--main);
+      }
+    }
+  }
+}
