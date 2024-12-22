@@ -24,7 +24,7 @@ export default function SignUp({
     email = email.value;
     password = password.value;
 
-    createUserWithEmailAndPassword(auth, email, password).then(fireBaseUserCred => {
+    createUserWithEmailAndPassword(auth, email, password).then(async fireBaseUserCred => {
       let { uid } = fireBaseUserCred?.user;
       let usersLength = users ? users?.length : 0;
       let index = usersLength + 1;
@@ -33,7 +33,7 @@ export default function SignUp({
         index,
         uid,
       });
-      addUser(newUser);
+      await addUser(newUser);
       toast.success(`User Created`);
       form.reset();
       window.location.href = `/signin`;
