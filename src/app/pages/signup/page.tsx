@@ -2,7 +2,7 @@
 
 import { useContext } from "react";
 import { toast } from "react-toastify";
-import Page from "@/app/components/page/page";
+import PageContainer from "@/app/components/page/page";
 import { User } from "@/app/shared/types/User";
 import { addUser, auth } from "@/server/firebase";
 import { SharedDatabase } from "@/app/shared/shared";
@@ -45,7 +45,7 @@ export default function SignUp({
   }
 
   return (
-    <Page title={title} desc={`This is the ${title}`} showSidebar={true}>
+    <PageContainer title={title} desc={`This is the ${title}`} showSidebar={true}>
       <div className={`wrapper container ${className} ${className}Container`}>
         <div className={`formGroup container`}>
           <h3 className={`formTitle`}>{title}</h3>
@@ -58,6 +58,6 @@ export default function SignUp({
           </form>
         </div>
       </div>
-    </Page>
+    </PageContainer>
   )
 }

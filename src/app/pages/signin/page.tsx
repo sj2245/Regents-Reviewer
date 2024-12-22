@@ -3,7 +3,7 @@
 import { useContext } from "react";
 import { toast } from "react-toastify";
 import { auth } from "@/server/firebase";
-import Page from "@/app/components/page/page";
+import PageContainer from "@/app/components/page/page";
 import { User } from "@/app/shared/types/User";
 import { SharedDatabase } from "@/app/shared/shared";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -48,7 +48,7 @@ export default function SignIn({
   }
 
   return (
-    <Page title={title} desc={`This is the ${title}`} showSidebar={true}>
+    <PageContainer title={title} desc={`This is the ${title}`} showSidebar={true}>
       <div className={`wrapper container ${className} ${className}Container`}>
         <div className={`formGroup container`}>
           <h3 className={`formTitle`}>{title}</h3>
@@ -61,6 +61,6 @@ export default function SignIn({
           </form>
         </div>
       </div>
-    </Page>
+    </PageContainer>
   )
 }
