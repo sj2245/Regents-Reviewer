@@ -18,9 +18,9 @@ export default function Sidebar({
   let [isExpanded, setIsExpanded] = useState(expanded);
 
   return (
-    <aside className={`sidebar ${isExpanded ? `expanded` : `collapsed`} flex column flexCenter gap5 w100 h100`} style={{
+    <aside className={`sidebar ${isExpanded ? `expanded` : `collapsed`} flex column flexCenter gap5 w100`} style={{
       ...style,
-      margin: `auto`,
+      margin: 0,
       position: `relative`,
       justifyContent: `center`,
     }}>

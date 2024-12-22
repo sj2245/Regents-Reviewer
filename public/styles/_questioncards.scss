@@ -2,20 +2,26 @@
   gap: 35px;
   width: 95%;
   display: grid;
-  margin: 0 auto;
-  overflow: auto;
-  max-height: 800px;
-  grid-template-columns: auto auto auto;
+  margin: 35px auto;
+  // overflow: auto;
+  // max-height: 800px;
+  grid-template-columns: auto auto;
   .questionCard {
     padding: 0;
+    grid-gap: 0;
     display: flex;
-    overflow: hidden;
     font-size: 1.4em;
     line-height: 1.4em;
     border-radius: 15px;
     flex-direction: column;
-    border: solid 1px white;
-    justify-content: space-evenly;
+    // border: solid 1px white;
+    height: fit-content !important;
+    justify-content: space-between;
+    .questionIndexRow {
+      display: flex;
+      font-weight: bold;
+      justify-content: space-between;
+    }
     .questionAndTopics {
       display: flex;
       grid-gap: 10px;
@@ -31,9 +37,9 @@
       }
     }
     .questionChoices {
-      gap: 10px;
+      gap: 15px;
       display: grid;
-      padding: 10px 15px;
+      padding: 13px 20px;
       align-items: center;
       justify-content: center;
       grid-template-columns: 50% 50%;
@@ -41,8 +47,10 @@
         width: 100%;
         border: none;
         outline: none;
-        font-size: 1.2em;
+        font-size: 22px;
+        font-weight: 900;
         line-height: 1.2em;
+        font-style: italic;
         border-radius: 15px;
         background: var(--main);
       }
