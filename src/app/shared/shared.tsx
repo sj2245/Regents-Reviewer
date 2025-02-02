@@ -6,7 +6,7 @@ import { Question } from "./types/Question";
 import { createContext, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
 import { SpreadSheetQuestions } from "./database/sample-questions";
-import { DatabaseTableNames, db, usersDatabaseCollection } from "@/server/firebase";
+import { addQuestion, DatabaseTableNames, db, environment, generateDatabaseMetaData, questionsDatabaseCollection, usersDatabaseCollection } from "@/server/firebase";
 
 export const SharedDatabase = createContext({});
 
@@ -27,17 +27,17 @@ export default function SharedData({ children }: { children: React.ReactNode; })
   let [usersLoading, setUsersLoading] = useState(false);
 
   // Questions
+  let [questions, setQuestions] = useState<Question[]>([]);
   let [questionsLoading, setQuestionsLoading] = useState(false);
   let [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
-  let [questions, setQuestions] = useState<Question[]>(SpreadSheetQuestions);
 
-  useEffect(() => {
+  useEffect(() => { // Logic Will Run Whenever items in the [] are changed
     if (user != null) {
       localStorage.setItem(`user`, JSON.stringify(user));
     }
   }, [user])
 
-  useEffect(() => {
+  useEffect(() => { // App First Load Logic
     // Check For Stored User
     const hasStoredUser = localStorage.getItem(`user`);
     if (hasStoredUser) {
@@ -49,18 +49,18 @@ export default function SharedData({ children }: { children: React.ReactNode; })
 
     // Database Tables
     const usersCollection = collection(db, usersDatabaseCollection);
-    const questionsCollection = collection(db, DatabaseTableNames.questions);
+    const questionsCollection = collection(db, questionsDatabaseCollection);
 
     // Real Time Listener for Users
     const unsubscribeFromUserDatabase = onSnapshot(usersCollection, snapshot => {
         setUsersLoading(true);
         const usersFromDB: User[] = [];
         snapshot.forEach((doc) => usersFromDB.push({ ...doc.data() } as any));
-        console.log(`Users Update from Firebase`, usersFromDB);
+        console.log(`Update from ${usersDatabaseCollection} Firebase`, usersFromDB);
         setUsers(usersFromDB);
         setUsersLoading(false);
       }, error => {
-        console.log(`Error getting Users from Firebase`, error);
+        console.log(`Error getting from ${usersDatabaseCollection} Firebase`, error);
         setUsersLoading(false);
       }
     );
@@ -70,11 +70,11 @@ export default function SharedData({ children }: { children: React.ReactNode; })
         setQuestionsLoading(true);
         const questionsFromDB: Question[] = [];
         snapshot.forEach((doc) => questionsFromDB.push({ ...doc.data() }));
-        console.log(`Questions Update from Firebase`, questionsFromDB);
-        // setQuestions(questionsFromDB);
+        console.log(`Update from ${questionsDatabaseCollection} Firebase`, questionsFromDB);
+        setQuestions(questionsFromDB);
         setQuestionsLoading(false);
       }, error => {
-        console.log(`Error getting Questions from Firebase`, error);
+        console.log(`Error getting from ${questionsDatabaseCollection} Firebase`, error);
         setQuestionsLoading(false);
       }
     );

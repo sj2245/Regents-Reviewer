@@ -91,7 +91,7 @@ export const SpreadSheetQuestions = [
     answer: 3,
     choices: [
       "Tyler said I and II because the coefficients are decreasing.",
-      "Susan said only II because all the numbers are decreasing.",
+      "Susie said only II because all the numbers are decreasing.",
       "Fred said II and III because the exponents are decreasing.",
       "Alyssa said II and III because they each have three terms."
     ]

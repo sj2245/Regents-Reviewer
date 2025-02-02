@@ -27,6 +27,6 @@ export class User {
     Object.assign(this, data);
     let currentTimeStampNoSpaces = new Date().toLocaleString().replaceAll(` `, `_`).replaceAll(`,`, `_`).replaceAll(`/`, `_`).replaceAll(`:`, `_`);
     if (!this.displayName || this.displayName == ``) this.displayName = this.email.split(`@`)[0];
-    if (!this.id || this.id == ``) this.id = `${this.index}_User_${this.displayName}_${currentTimeStampNoSpaces}_${this.uid}`;
+    if (!this.id || this.id == ``) this.id = `User_${this.index}_${this.displayName}_${currentTimeStampNoSpaces}_${this.uid}`;
   }
 }

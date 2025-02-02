@@ -1,19 +1,24 @@
 import { initializeApp } from "firebase/app";
 import { User } from "@/app/shared/types/User";
+import { Question } from "@/app/shared/types/Question";
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
 import { doc, getFirestore, setDoc } from "firebase/firestore";
 
 export const Environments = {
-  beta: `beta_`,
   prod: ``,
+  beta: `beta_`,
+  alpha: `alpha_`,
 }
 
 export const DatabaseTableNames = {
-  questions: `questions`,
   users: `users`,
+  quizzes: `quizzes`,
+  features: `features`,
+  questions: `questions`,
+  notifications: `notifications`,
 }
 
-export const environment = process.env.NODE_ENV == `production` ? Environments.prod : Environments.beta;
+export const environment = process.env.NODE_ENV == `production` ? Environments.alpha : Environments.beta;
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
@@ -32,6 +37,22 @@ const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
+export const usersDatabaseCollection = environment + DatabaseTableNames.users;
+export const questionsDatabaseCollection = environment + DatabaseTableNames.questions;
+
+export const generateUniqueID = () => {
+  let id = Math.random().toString(36).substr(2, 9);
+  return Array.from(id).map(char => Math.random() > 0.5 ? char.toUpperCase() : char).join(``);
+}
+
+export const generateDatabaseMetaData = (type: string, index: any) => {
+  let uuid, uniqueID, currentTimeStampNoSpaces;
+  uuid = generateUniqueID();
+  currentTimeStampNoSpaces = new Date().toLocaleString().replaceAll(` `, `_`).replaceAll(`,`, `_`).replaceAll(`/`, `_`).replaceAll(`:`, `_`);
+  uniqueID = `${type}_${index}_${currentTimeStampNoSpaces}_${uuid}`;
+  return { uuid, uniqueID, currentTimeStampNoSpaces };
+}
+
 export const userConverter = {
   toFirestore: (usr: User) => {
     return JSON.parse(JSON.stringify(usr));
@@ -42,10 +63,46 @@ export const userConverter = {
   }
 }
 
-export const usersDatabaseCollection = environment + DatabaseTableNames.users;
+export const questionConverter = {
+  toFirestore: (ques: Question) => {
+    return JSON.parse(JSON.stringify(ques));
+  },
+  fromFirestore: (snapshot: any, options: any) => {
+    const data = snapshot.data(options);
+    return new Question(data);
+  }
+}
+
+export const initializeQuestionsDB = (questionsArray: Question[], user: User) => {
+  questionsArray.forEach((ques, quesIndex) => {
+    let metaData = generateDatabaseMetaData(`Question`, quesIndex + 1);
+    let { uuid, uniqueID } = metaData;
+    addQuestion({
+      ...ques,
+      uuid,
+      id: uniqueID,
+      user_id: user?.id,
+      user_email: user?.email,
+    });
+  });
+}
+
 export const addUser = async (usr: User) => {
-  const userReference = doc(db, usersDatabaseCollection, usr?.id).withConverter(userConverter);
+  const userReference = await doc(db, usersDatabaseCollection, usr?.id).withConverter(userConverter);
   await setDoc(userReference, usr as User);
 };
+
+export const addQuestion = async (ques: Question) => {
+  const questionReference = await doc(db, questionsDatabaseCollection, ques?.id).withConverter(questionConverter);
+  await setDoc(questionReference, ques as Question);
+}
+
+// export const deleteQuestionFromDB = async (ques: Question) => {
+  // Fill this in later
+// }
+
+// export const updateQuestionInDB = async (ques: Question) => {
+  // Fill this in later
+// }
 
 export default app;
