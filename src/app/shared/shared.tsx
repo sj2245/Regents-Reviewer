@@ -5,8 +5,7 @@ import React, { useEffect } from "react";
 import { Question } from "./types/Question";
 import { createContext, useState } from "react";
 import { collection, onSnapshot } from "firebase/firestore";
-import { SpreadSheetQuestions } from "./database/sample-questions";
-import { addQuestion, DatabaseTableNames, db, environment, generateDatabaseMetaData, questionsDatabaseCollection, usersDatabaseCollection } from "@/server/firebase";
+import { db, questionsDatabaseCollection, usersDatabaseCollection } from "@/server/firebase";
 
 export const SharedDatabase = createContext({});
 
@@ -28,7 +27,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
 
   // Questions
   let [questions, setQuestions] = useState<Question[]>([]);
-  let [questionsLoading, setQuestionsLoading] = useState(false);
+  let [questionsLoading, setQuestionsLoading] = useState<boolean>(true);
   let [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
 
   useEffect(() => { // Logic Will Run Whenever items in the [] are changed
@@ -52,7 +51,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     const questionsCollection = collection(db, questionsDatabaseCollection);
 
     // Real Time Listener for Users
-    const unsubscribeFromUserDatabase = onSnapshot(usersCollection, snapshot => {
+    const usersRealTimeListener = onSnapshot(usersCollection, snapshot => {
         setUsersLoading(true);
         const usersFromDB: User[] = [];
         snapshot.forEach((doc) => usersFromDB.push({ ...doc.data() } as any));
@@ -66,7 +65,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     );
     
     // Real Time Listener for Questions
-    const unsubscribeFromQuestionDatabase = onSnapshot(questionsCollection, snapshot => {
+    const questionsRealTimeListener = onSnapshot(questionsCollection, snapshot => {
         setQuestionsLoading(true);
         const questionsFromDB: Question[] = [];
         snapshot.forEach((doc) => questionsFromDB.push({ ...doc.data() }));
@@ -80,8 +79,8 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     );
 
     return () => {
-      unsubscribeFromUserDatabase();
-      unsubscribeFromQuestionDatabase();
+      usersRealTimeListener();
+      questionsRealTimeListener();
     };
   }, []);
 
@@ -94,6 +93,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
       darkMode, setDarkMode,
       questions, setQuestions,
       questionToEdit, setQuestionToEdit,
+      questionsLoading, setQuestionsLoading,
     }}>
       {children}
     </SharedDatabase.Provider>

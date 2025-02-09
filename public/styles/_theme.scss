@@ -200,6 +200,13 @@ nav {
   }
 }
 
+.loading {
+    display: flex;
+    grid-gap: 25px;
+    align-items: center;
+    justify-content: center;
+}
+
 ::-webkit-scrollbar {
   width: 7px;
 }

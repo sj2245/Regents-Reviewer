@@ -34,21 +34,21 @@ export default function PageContainer({
         {showSidebar ? <Sidebar style={{ maxWidth: sidebarWidth }} expanded={true} /> : <></>}
         <main className={`main w100 flex column gap5 spaceBetween alignCenter`}>
             <Header />
-            <ToastContainer
-                hideProgressBar={false}
-                position={`top-right`}
-                pauseOnHover={false}
-                newestOnTop={false}
-                autoClose={3500}
-                pauseOnFocusLoss
-                theme={`dark`}
-                closeOnClick
-                rtl={false}
-                draggable
-            />
             {children}
             <Footer />
         </main>
+          <ToastContainer
+              hideProgressBar={false}
+              position={`top-right`}
+              pauseOnHover={false}
+              newestOnTop={false}
+              autoClose={3500}
+              pauseOnFocusLoss
+              theme={`dark`}
+              closeOnClick
+              rtl={false}
+              draggable
+          />
     </body>
   )
 }

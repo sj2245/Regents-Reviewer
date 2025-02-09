@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
+import { brandName } from './shared/shared';
+import LoadingSpinner from './components/loader/loading-spinner';
 
 export default function Loading() {
     return <>
-        <div className={`loading`}>
-            Loading
-        </div>
+        <LoadingSpinner label={brandName} extraClasses={`regentsReviewerSpinner`} color={`secondary`} />
     </>
 }
