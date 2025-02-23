@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { User } from "@/app/shared/types/User";
 import { Question } from "@/app/shared/types/Question";
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
-import { doc, getFirestore, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
 
 export const Environments = {
   prod: ``,
@@ -18,6 +18,7 @@ export const DatabaseTableNames = {
   notifications: `notifications`,
 }
 
+// export const environment = Environments.prod; // Implement this later
 export const environment = process.env.NODE_ENV == `production` ? Environments.alpha : Environments.beta;
 
 const provider = new GoogleAuthProvider();
@@ -38,7 +39,7 @@ export const db = getFirestore(app);
 export const auth = getAuth(app);
 
 export const usersDatabaseCollection = environment + DatabaseTableNames.users;
-export const questionsDatabaseCollection = environment + DatabaseTableNames.questions;
+export const questionsDatabaseCollection = Environments.prod + DatabaseTableNames.questions;
 
 export const generateUniqueID = () => {
   let id = Math.random().toString(36).substr(2, 9);
@@ -92,14 +93,27 @@ export const addUser = async (usr: User) => {
   await setDoc(userReference, usr as User);
 };
 
-export const addQuestion = async (ques: Question) => {
-  const questionReference = await doc(db, questionsDatabaseCollection, ques?.id).withConverter(questionConverter);
-  await setDoc(questionReference, ques as Question);
+export const addQuestion = async (ques: Question, questionsDatabaseToUse = questionsDatabaseCollection) => {
+  try {
+    const questionReference = await doc(db, questionsDatabaseToUse, ques?.id).withConverter(questionConverter);
+    await setDoc(questionReference, ques as Question);
+    return questionReference;
+  } catch (addQuestionError) {
+    console.log(`Add Question Error`, addQuestionError);
+    return addQuestionError;
+  }
 }
 
-// export const deleteQuestionFromDB = async (ques: Question) => {
-  // Fill this in later
-// }
+export const deleteQuestionFromDB = async (quesID: string) => {
+  try {
+    const questionReference = await doc(db, questionsDatabaseCollection, quesID).withConverter(questionConverter);
+    await deleteDoc(questionReference);
+    return questionReference;
+  } catch (deleteQuestionError) {
+    console.log(`Delete Question Error`, deleteQuestionError);
+    return deleteQuestionError;
+  }
+}
 
 // export const updateQuestionInDB = async (ques: Question) => {
   // Fill this in later

@@ -54,7 +54,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     const usersRealTimeListener = onSnapshot(usersCollection, snapshot => {
         setUsersLoading(true);
         const usersFromDB: User[] = [];
-        snapshot.forEach((doc) => usersFromDB.push({ ...doc.data() } as any));
+        snapshot.forEach((doc) => usersFromDB.push(new User({ ...doc.data() }) as User));
         console.log(`Update from ${usersDatabaseCollection} Firebase`, usersFromDB);
         setUsers(usersFromDB);
         setUsersLoading(false);
@@ -68,7 +68,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
     const questionsRealTimeListener = onSnapshot(questionsCollection, snapshot => {
         setQuestionsLoading(true);
         const questionsFromDB: Question[] = [];
-        snapshot.forEach((doc) => questionsFromDB.push({ ...doc.data() }));
+        snapshot.forEach((doc) => questionsFromDB.push(new Question({ ...doc.data() as any }) as Question));
         console.log(`Update from ${questionsDatabaseCollection} Firebase`, questionsFromDB);
         setQuestions(questionsFromDB);
         setQuestionsLoading(false);

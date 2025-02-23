@@ -1,22 +1,43 @@
 import { useContext } from "react";
+import { toast } from "react-toastify";
 import { Roles } from "@/app/shared/types/User";
-import { Delete, Edit } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
 import { SharedDatabase } from "@/app/shared/shared";
 import { Question } from "@/app/shared/types/Question";
+import { CopyAll, Delete, Edit } from "@mui/icons-material";
+import { addQuestion, DatabaseTableNames, deleteQuestionFromDB } from "@/server/firebase";
 
 export default function QuestionCard({ quesIndex, ques }: any) {
   let { user, setQuestions } = useContext<any>(SharedDatabase);
 
   const editQuestion = (question: Question) => {
-    console.log(`Simulate On Edit Question`, question);
+    console.log(`On Edit Question, Fill in Logic Later`, question);
     // Fill in this logic later
   }
 
-  const deleteQuestion = (questionID: any) => {
-    setQuestions((prevQuestions: any) => prevQuestions.filter((q: Question) => q.id != questionID));
-    // ^ This just simulates delete
-    // Fill in this logic to save deletions later
+  const cloneQuestion = async (question: Question) => {
+    let quesDatabaseToUse = DatabaseTableNames.questions;
+    await addQuestion(question, quesDatabaseToUse)?.then(quesRef => {
+      toast.success(`Successfully Cloned Question`);
+    })?.catch(onAddQuestionError => {
+      toast.error(`Failed to Clone Question`);
+    });
+  }
+
+  const finallyDeleteQuestionFromDatabase = async (questionID: string) => {
+    await deleteQuestionFromDB(questionID)?.then(quesRef => {
+      toast.success(`Successfully Deleted Question`);
+    })?.catch(onDeleteQuestionError => {
+      toast.error(`Failed to Delete Question`);
+    })
+  }
+
+  const deleteQuestion = async (questionID: string) => {
+    // Confirm with User then Finally Delete
+    // Enhance this by turning it into John Cena later on
+    // For now simple Native Javascript Confirm
+    let confirmDeleteQuestion = confirm(`Are you sure you would like to delete?`);
+    if (confirmDeleteQuestion) await finallyDeleteQuestionFromDatabase(questionID);
   }
 
   const onAnswerClick = (question: Question, choice: any, quesIndex: number) => {
@@ -43,12 +64,15 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           </div>
           {user != null && user.level > Roles.Quiz_Taker.level ? (
             <div className={`questionAdminColumn`}>
-              <IconButton className={`editButton`} size={`small`} onClick={(e: any) => editQuestion(ques)}>
+              {/* <IconButton title={`Clone`} className={`cloneButton`} size={`small`} onClick={(e: any) => cloneQuestion(ques)}>
+                <CopyAll style={{ color: `white` }} />  
+              </IconButton> */}
+              <IconButton title={`Edit`} className={`editButton`} size={`small`} onClick={(e: any) => editQuestion(ques)}>
                 <Edit style={{ color: `white` }} />  
               </IconButton>
-              <IconButton className={`deleteButton`} size={`small`} onClick={(e: any) => deleteQuestion(ques.id)}>
+              {/* <IconButton title={`Delete`} className={`deleteButton`} size={`small`} onClick={(e: any) => deleteQuestion(ques.id)}>
                 <Delete style={{ color: `white` }} />  
-              </IconButton>
+              </IconButton> */}
             </div>
           ) : <></>}
         </div>
