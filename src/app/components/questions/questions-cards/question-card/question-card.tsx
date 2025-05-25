@@ -4,15 +4,29 @@ import { Roles } from "@/app/shared/types/User";
 import { Button, IconButton } from "@mui/material";
 import { SharedDatabase } from "@/app/shared/shared";
 import { Question } from "@/app/shared/types/Question";
-import { CopyAll, Delete, Edit } from "@mui/icons-material";
+import { Close, CopyAll, Delete, Edit } from "@mui/icons-material";
 import { addQuestion, DatabaseTableNames, deleteQuestionFromDB } from "@/server/firebase";
 
+
 export default function QuestionCard({ quesIndex, ques }: any) {
-  let { user, setQuestions } = useContext<any>(SharedDatabase);
+  let { user, questionToEdit, setQuestionToEdit } = useContext<any>(SharedDatabase);
+
+  const cancelEditQuestion = () => {
+    setQuestionToEdit(null);
+  }
 
   const editQuestion = (question: Question) => {
     console.log(`On Edit Question, Fill in Logic Later`, question);
     // Fill in this logic later
+    setQuestionToEdit(question);
+    // Find the question that we are editing
+    // first we must find the reference id to the question document in our database
+    // enter editing mode, to give the user a gui to edit it
+    // border of the question becomes yellow
+    // the pencil will become an X to allow the user to exit editing mode
+
+    // listen for changes the user makes
+    // when the user hits save, we will save the question to the database
   }
 
   const cloneQuestion = async (question: Question) => {
@@ -62,14 +76,20 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           <div className={`questionSubjectColumn`}>
             {ques.subject}
           </div>
-          {user != null && user.level > Roles.Quiz_Taker.level ? (
+          {user != null && user.level >= Roles.Quiz_Maker.level ? (
             <div className={`questionAdminColumn`}>
               {/* <IconButton title={`Clone`} className={`cloneButton`} size={`small`} onClick={(e: any) => cloneQuestion(ques)}>
                 <CopyAll style={{ color: `white` }} />  
               </IconButton> */}
-              <IconButton title={`Edit`} className={`editButton`} size={`small`} onClick={(e: any) => editQuestion(ques)}>
-                <Edit style={{ color: `white` }} />  
-              </IconButton>
+              {questionToEdit != null && questionToEdit.id == ques.id ? (
+                <IconButton title={`Cancel`} className={`cancelEditingButton`} size={`small`} onClick={(e: any) => cancelEditQuestion()}>
+                  <Close style={{ color: `white` }} />  
+                </IconButton>
+                ) : (
+                <IconButton title={`Edit`} className={`editButton`} size={`small`} onClick={(e: any) => editQuestion(ques)}>
+                  <Edit style={{ color: `white` }} />  
+                </IconButton>
+                )}
               {/* <IconButton title={`Delete`} className={`deleteButton`} size={`small`} onClick={(e: any) => deleteQuestion(ques.id)}>
                 <Delete style={{ color: `white` }} />  
               </IconButton> */}
