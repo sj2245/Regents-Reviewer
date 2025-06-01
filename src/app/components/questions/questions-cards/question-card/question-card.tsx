@@ -15,6 +15,11 @@ export default function QuestionCard({ quesIndex, ques }: any) {
     setQuestionToEdit(null);
   }
 
+  const onTextEditDone = (e: any) => {
+    let updatedVal = e.target.textContent;
+    console.log(`onTextEditDone SAVE TO DATABASE LATER`, updatedVal);
+  }
+
   const editQuestion = (question: Question) => {
     console.log(`On Edit Question, Fill in Logic Later`, question);
     // Fill in this logic later
@@ -96,7 +101,7 @@ export default function QuestionCard({ quesIndex, ques }: any) {
             </div>
           ) : <></>}
         </div>
-        <div className={`question`}>
+        <div className={`question`} contentEditable={questionToEdit != null && questionToEdit.id == ques.id} suppressContentEditableWarning spellCheck={false} onBlur={(e) => onTextEditDone(e)}>
           {ques.question}
         </div>
         <div className={`questionTopics`}>

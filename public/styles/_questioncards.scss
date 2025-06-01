@@ -1,6 +1,13 @@
 .inProcessEditing {
   border: 5px rgb(227, 169, 8) solid !important;
   border-radius: 20px !important;
+  .question {
+    &:hover {
+      background: rgb(255 255 255 / 25%);
+      cursor: pointer;
+      border-radius: 15px;
+    }
+  }
 }
 
 .questionCards {
@@ -38,7 +45,9 @@
       border-top-left-radius: 15px;
       border-top-right-radius: 15px;
       .question {
+        padding: 5px;
         font-weight: bold;
+        transition: 150ms ease-in-out;
       }
       .questionTopics {
         font-style: italic;
