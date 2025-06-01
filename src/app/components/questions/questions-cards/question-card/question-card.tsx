@@ -67,7 +67,7 @@ export default function QuestionCard({ quesIndex, ques }: any) {
   }
 
   return (
-    <div key={quesIndex} className={`questionCard questionCardComponent`} style={{ background: `var(--cardBg)` }}>
+    <div key={quesIndex} className={`questionCard questionCardComponent ${questionToEdit != null && questionToEdit.id == ques.id ? `inProcessEditing` : ``}`} style={{ background: `var(--cardBg)` }}>
       <div className={`questionAndTopics`} style={{ background: `var(--${ques.difficulty})` }}>
         <div className={`questionIndexRow`}>
           <div className={`questionIndexColumn`}>

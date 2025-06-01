@@ -1,4 +1,10 @@
+.inProcessEditing {
+  border: 5px rgb(227, 169, 8) solid !important;
+  border-radius: 20px !important;
+}
+
 .questionCards {
+  
   gap: 35px;
   width: 95%;
   display: grid;
@@ -7,6 +13,8 @@
   // max-height: 800px;
   grid-template-columns: auto auto;
   .questionCard {
+    border: 5px var(--bg) solid ;
+    transition: 150ms ease-in-out;
     padding: 0;
     grid-gap: 0;
     display: flex;
@@ -55,5 +63,6 @@
         background: var(--main);
       }
     }
+
   }
 }
