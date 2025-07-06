@@ -25,11 +25,12 @@ export default function SharedData({ children }: { children: React.ReactNode; })
   let [user, setUser] = useState<User | null>(null);
   let [usersLoading, setUsersLoading] = useState(false);
 
-  // Questions
+  // Questions 
   let [questions, setQuestions] = useState<Question[]>([]);
   let [questionsLoading, setQuestionsLoading] = useState<boolean>(true);
   let [questionToEdit, setQuestionToEdit] = useState<Question | null>(null);
-
+  let [questionDialogOpen, setQuestionDialogOpen] = useState<boolean>(false);
+  
   useEffect(() => { // Logic Will Run Whenever items in the [] are changed
     if (user != null) {
       localStorage.setItem(`user`, JSON.stringify(user));
@@ -94,6 +95,7 @@ export default function SharedData({ children }: { children: React.ReactNode; })
       questions, setQuestions,
       questionToEdit, setQuestionToEdit,
       questionsLoading, setQuestionsLoading,
+      questionDialogOpen, setQuestionDialogOpen,
     }}>
       {children}
     </SharedDatabase.Provider>

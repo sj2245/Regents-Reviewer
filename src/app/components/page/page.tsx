@@ -8,6 +8,7 @@ import { ToastContainer } from "react-toastify";
 import Sidebar, { sidebarWidth } from "../sidebar/sidebar";
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { brandName, logoURL, description } from "@/app/shared/shared";
+import QuestionDialog from "../questions/question-dialog/question-dialog";
 
 export default function PageContainer({ 
     title,
@@ -37,18 +38,19 @@ export default function PageContainer({
             {children}
             <Footer />
         </main>
-          <ToastContainer
-              hideProgressBar={false}
-              position={`top-right`}
-              pauseOnHover={false}
-              newestOnTop={false}
-              autoClose={3500}
-              pauseOnFocusLoss
-              theme={`dark`}
-              closeOnClick
-              rtl={false}
-              draggable
-          />
+        <QuestionDialog />
+        <ToastContainer
+            hideProgressBar={false}
+            position={`top-right`}
+            pauseOnHover={false}
+            newestOnTop={false}
+            autoClose={3500}
+            pauseOnFocusLoss
+            theme={`dark`}
+            closeOnClick
+            rtl={false}
+            draggable
+        />
     </body>
   )
 }

@@ -1,17 +1,26 @@
 'use client';
 
-import { useContext } from "react";
-import { SharedDatabase } from "@/app/shared/shared";
-import { Question } from "@/app/shared/types/Question";
-import QuestionCard from "./question-card/question-card";
-import LoadingSpinner from "../../loader/loading-spinner";
+import { useContext } from 'react';
+import { Button } from '@mui/material';
+import { SharedDatabase } from '@/app/shared/shared';
+import { Question } from '@/app/shared/types/Question';
+import QuestionCard from './question-card/question-card';
+import LoadingSpinner from '../../loader/loading-spinner';
+import { Roles, User } from '@/app/shared/types/User';
 
 export default function QuestionCards() {
-  let { questions, questionsLoading } = useContext<any>(SharedDatabase);
+  let { user, questions, questionsLoading, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
   // Whenever we map over something, we need to include a Key property
   // Also include a return
-  return (
-    questionsLoading ? (
+  return <>
+   {(user != null && user.level >= Roles.Quiz_Maker.level) && !questionsLoading && (
+      <div className={`questionsTopContent`}>
+        <Button className={`questionButton createQuestionButton`} onClick={() => setQuestionDialogOpen(!questionDialogOpen)}>
+          + Create Question Form
+        </Button>
+      </div>
+   )}
+    {questionsLoading ? (
       <LoadingSpinner label={`Question(s)`} extraClasses={`questionsLoadingSpinner`} />
     ) : (
       questions.length > 0 ? (
@@ -21,6 +30,6 @@ export default function QuestionCards() {
           ))}
         </div>
       ) : `No Questions`
-    )
-  )
+    )}
+  </>
 }
