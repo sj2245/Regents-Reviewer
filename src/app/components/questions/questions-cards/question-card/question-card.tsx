@@ -5,7 +5,7 @@ import { Button, IconButton } from "@mui/material";
 import { SharedDatabase } from "@/app/shared/shared";
 import { Question } from "@/app/shared/types/Question";
 import { Close, CopyAll, Delete, Edit } from "@mui/icons-material";
-import { addQuestion, DatabaseTableNames, deleteQuestionFromDB } from "@/server/firebase";
+import { addQuestion, DatabaseTableNames, deleteQuestionFromDB, updateQuestionInDB } from "@/server/firebase";
 
 
 export default function QuestionCard({ quesIndex, ques }: any) {
@@ -17,6 +17,8 @@ export default function QuestionCard({ quesIndex, ques }: any) {
 
   const onTextEditDone = (e: any) => {
     let updatedVal = e.target.textContent;
+    updateQuestionInDB(questionToEdit, { question: updatedVal });
+    toast.success(`Successfully Edited Question`);
     console.log(`onTextEditDone SAVE TO DATABASE LATER`, updatedVal);
   }
 
@@ -81,6 +83,7 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           <div className={`questionSubjectColumn`}>
             {ques.subject}
           </div>
+          {/* Locked by role */}
           {user != null && user.level >= Roles.Quiz_Maker.level ? (
             <div className={`questionAdminColumn`}>
               {/* <IconButton title={`Clone`} className={`cloneButton`} size={`small`} onClick={(e: any) => cloneQuestion(ques)}>
@@ -94,12 +97,13 @@ export default function QuestionCard({ quesIndex, ques }: any) {
                 <IconButton title={`Edit`} className={`editButton`} size={`small`} onClick={(e: any) => editQuestion(ques)}>
                   <Edit style={{ color: `white` }} />  
                 </IconButton>
-                )}
-              {/* <IconButton title={`Delete`} className={`deleteButton`} size={`small`} onClick={(e: any) => deleteQuestion(ques.id)}>
+              )}
+              <IconButton title={`Delete`} className={`deleteButton`} size={`small`} onClick={(e: any) => deleteQuestion(ques.id)}>
                 <Delete style={{ color: `white` }} />  
-              </IconButton> */}
+              </IconButton>
             </div>
           ) : <></>}
+
         </div>
         <div className={`question`} contentEditable={questionToEdit != null && questionToEdit.id == ques.id} suppressContentEditableWarning spellCheck={false} onBlur={(e) => onTextEditDone(e)}>
           {ques.question}

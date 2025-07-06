@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { User } from "@/app/shared/types/User";
 import { Question } from "@/app/shared/types/Question";
 import { GoogleAuthProvider, getAuth } from 'firebase/auth';
-import { deleteDoc, doc, getFirestore, setDoc } from "firebase/firestore";
+import { deleteDoc, doc, getFirestore, setDoc, updateDoc } from "firebase/firestore";
 
 export const Environments = {
   prod: ``,
@@ -115,8 +115,9 @@ export const deleteQuestionFromDB = async (quesID: string) => {
   }
 }
 
-// export const updateQuestionInDB = async (ques: Question) => {
-  // Fill this in later
-// }
+export const updateQuestionInDB = async (ques: Question, updatesObject: Partial<Question>) => {
+  const questionReference = await doc(db, questionsDatabaseCollection, ques.id).withConverter(questionConverter);
+  await updateDoc(questionReference, updatesObject);
+}
 
 export default app;
