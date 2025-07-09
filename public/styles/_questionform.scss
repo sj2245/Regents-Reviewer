@@ -1,3 +1,30 @@
+.selectorFields {
+    gap: 15px;
+    width: 100%;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr;
+    &.selectorFieldGrid {
+        grid-template-columns: 35% 1fr;
+    }
+    .formField {
+        width: 100%;
+        .selectorField {
+            width: 100%;
+            color: white;
+            max-height: 38px;
+            background: var(--darkMain);
+        }
+    }
+}
+
+.selectorFieldOption {
+    transition: 150ms ease-in-out;
+    &:hover {
+        background: var(--darkMain);
+    }
+}
+
 .questionsTopContent {
     width: 95%;
     margin: 35px auto 0;
