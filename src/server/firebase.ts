@@ -19,7 +19,7 @@ export const DatabaseTableNames = {
 }
 
 // export const environment = Environments.prod; // Implement this later
-export const environment = process.env.NODE_ENV == `production` ? Environments.alpha : Environments.beta;
+export const environment = Environments.prod;
 
 const provider = new GoogleAuthProvider();
 provider.setCustomParameters({ prompt: 'select_account' });
