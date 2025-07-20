@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button } from '@mui/material';
 
 export type NavItemProps = {
   icon?: any;
@@ -16,7 +16,7 @@ export default function NavItem({
   return (
    link ? (
      <li>
-      <Button>
+      <Button className={`navMenuButton`}>
         <a href={link} className={`navItem flex gap5 alignCenter borderRadius ${link ? `` : `label`}`} style={{ fontSize, padding: `15px 15px 15px 7px` }}>
           {icon}
           <span className={`labelText`}>{name}</span>

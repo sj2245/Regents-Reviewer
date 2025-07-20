@@ -1,15 +1,15 @@
-import { useContext } from "react";
-import { toast } from "react-toastify";
-import { Roles } from "@/app/shared/types/User";
-import { Button, IconButton } from "@mui/material";
-import { SharedDatabase } from "@/app/shared/shared";
-import { Question } from "@/app/shared/types/Question";
-import { Close, CopyAll, Delete, Edit } from "@mui/icons-material";
-import { addQuestion, DatabaseTableNames, deleteQuestionFromDB, updateQuestionInDB } from "@/server/firebase";
+import { useContext } from 'react';
+import { toast } from 'react-toastify';
+import { Roles } from '@/app/shared/types/User';
+import { Button, IconButton } from '@mui/material';
+import { SharedDatabase } from '@/app/shared/shared';
+import { Question } from '@/app/shared/types/Question';
+import { Close, Delete, Edit } from '@mui/icons-material';
+import { deleteQuestionFromDB, updateQuestionInDB } from '@/server/firebase';
 
 
 export default function QuestionCard({ quesIndex, ques }: any) {
-  let { user, questionToEdit, setQuestionToEdit } = useContext<any>(SharedDatabase);
+  let { user, questionToEdit, setQuestionToEdit, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
 
   const cancelEditQuestion = () => {
     setQuestionToEdit(null);
@@ -19,31 +19,21 @@ export default function QuestionCard({ quesIndex, ques }: any) {
     let updatedVal = e.target.textContent;
     updateQuestionInDB(questionToEdit, { question: updatedVal });
     toast.success(`Successfully Edited Question`);
-    console.log(`onTextEditDone SAVE TO DATABASE LATER`, updatedVal);
   }
 
   const editQuestion = (question: Question) => {
-    console.log(`On Edit Question, Fill in Logic Later`, question);
-    // Fill in this logic later
     setQuestionToEdit(question);
-    // Find the question that we are editing
-    // first we must find the reference id to the question document in our database
-    // enter editing mode, to give the user a gui to edit it
-    // border of the question becomes yellow
-    // the pencil will become an X to allow the user to exit editing mode
-
-    // listen for changes the user makes
-    // when the user hits save, we will save the question to the database
+    setQuestionDialogOpen(!questionDialogOpen);
   }
 
-  const cloneQuestion = async (question: Question) => {
-    let quesDatabaseToUse = DatabaseTableNames.questions;
-    await addQuestion(question, quesDatabaseToUse)?.then(quesRef => {
-      toast.success(`Successfully Cloned Question`);
-    })?.catch(onAddQuestionError => {
-      toast.error(`Failed to Clone Question`);
-    });
-  }
+  // const cloneQuestion = async (question: Question) => {
+  //   let quesDatabaseToUse = DatabaseTableNames.questions;
+  //   await addQuestion(question, quesDatabaseToUse)?.then(quesRef => {
+  //     toast.success(`Successfully Cloned Question`);
+  //   })?.catch(onAddQuestionError => {
+  //     toast.error(`Failed to Clone Question`);
+  //   });
+  // }
 
   const finallyDeleteQuestionFromDatabase = async (questionID: string) => {
     await deleteQuestionFromDB(questionID)?.then(quesRef => {
@@ -54,9 +44,6 @@ export default function QuestionCard({ quesIndex, ques }: any) {
   }
 
   const deleteQuestion = async (questionID: string) => {
-    // Confirm with User then Finally Delete
-    // Enhance this by turning it into John Cena later on
-    // For now simple Native Javascript Confirm
     let confirmDeleteQuestion = confirm(`Are you sure you would like to delete?`);
     if (confirmDeleteQuestion) await finallyDeleteQuestionFromDatabase(questionID);
   }

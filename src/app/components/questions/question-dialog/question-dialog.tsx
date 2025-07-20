@@ -1,23 +1,49 @@
 import { toast } from 'react-toastify';
 import { Check, Close } from '@mui/icons-material';
-import { useContext, useRef, useState } from 'react';
 import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Difficulties, Subjects } from '@/app/shared/types/questionTypes';
-import { addQuestion, generateDatabaseMetaData } from '@/server/firebase';
+import { addQuestion, generateDatabaseMetaData, updateQuestionInDB } from '@/server/firebase';
 import { Button, Dialog, IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 export default function QuestionDialog() {
-    let { user, questions, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
+    let { user, questions, questionDialogOpen, setQuestionDialogOpen, setQuestionToEdit, questionToEdit} = useContext<any>(SharedDatabase);
 
     let formRef = useRef(null);
 
-    let [answer, setAnswer] = useState(`A`);
-    let [subject, setSubject] = useState<any>(Subjects.Math);
-    let [difficulty, setDifficulty] = useState(Difficulties.Easy);
-    let [topics, setTopics] = useState(subject.topics.slice(0, 2));
+    let subjectsArr = Object.values(Subjects);
+    let [difficulty, setDifficulty] = useState(questionToEdit == null ? Difficulties.Easy : questionToEdit.difficulty);
+    let [answer, setAnswer] = useState(questionToEdit == null ? `A` : questionToEdit.choices[0]);
+    let [subject, setSubject] = useState<any>(questionToEdit == null ? Subjects.Math : subjectsArr?.find(subj => subj.name == questionToEdit.subject));
+    let [topics, setTopics] = useState(questionToEdit == null ? subject.topics.slice(0, 2) : questionToEdit?.topics);
     let [difficulties, setDifficulties] = useState(Object.values(Difficulties));
-    let [subjects, setSubjects] = useState(Object.values(Subjects)?.map(s => s?.name));
+    let [subjects, setSubjects] = useState(subjectsArr?.map(s => s?.name));
+
+    const setDefault = () => {
+        setAnswer(`A`);
+        setSubject(Subjects.Math);
+        setDifficulty(Difficulties.Easy);
+        setTopics(Subjects.Math.topics.slice(0, 2));
+    }
+
+    useEffect(() => {
+        if (questionToEdit == null) {
+            setDefault();
+        } else {
+            setDifficulty(questionToEdit.difficulty);
+            setSubject(subjectsArr?.find(subj => subj.name == questionToEdit.subject));
+            setTopics(questionToEdit?.topics ?? subject?.topics?.slice(0, 1));
+
+            let [A, B, C, D] = questionToEdit?.choices;
+            let choices = { A, B, C, D };
+            let choiceEntries = Object.entries(choices);
+            let answerChoice = choiceEntries.filter(ce => ce[1] == questionToEdit.answer);
+            let answr = answerChoice[0][0];
+
+            setAnswer(answr);
+        }
+    }, [questionToEdit, formRef])
 
     const onDifficultyChange = (e: SelectChangeEvent) => {
         setDifficulty(e?.target?.value as string);
@@ -28,6 +54,11 @@ export default function QuestionDialog() {
             let form: HTMLFormElement = formRef?.current;
             form?.reset();
         }
+    }
+
+    const onCloseButtonLogic = () => {
+        setQuestionToEdit(null);
+        setQuestionDialogOpen(!questionDialogOpen);
     }
 
     const onSubjectChange = (e: any) => {
@@ -83,13 +114,17 @@ export default function QuestionDialog() {
                 explanation: `No Explanation Yet`,
             })
     
-            addQuestion(newQuestionToStore);
-    
-            toast.success(`Successfully Added Question`);
+            if (questionToEdit == null) {
+                addQuestion(newQuestionToStore);
+            } else {
+                let { question, subject, topics, choices, difficulty, answer } = newQuestionToStore;
+                updateQuestionInDB(questionToEdit, { question, subject, topics, choices, difficulty, answer });
+                setQuestionToEdit(null);
+            }
+
+            toast.success(`Successfully ${questionToEdit == null ? `Added` : `Updated`} Question`);
             form.reset();
             setQuestionDialogOpen(!questionDialogOpen);
-
-            // console.log(`onFormSubmit`, {newQuestionToStore, formValues});
         } else {
             toast.error(`Please Fill Out Form`);
             return;
@@ -104,18 +139,24 @@ export default function QuestionDialog() {
                     <Button className={`dialogButton`} onClick={() => clearForm()}>
                         Clear
                     </Button>
-                    <IconButton className={`dialogButton`} onClick={() => setQuestionDialogOpen(!questionDialogOpen)}>
+                    <IconButton className={`dialogButton`} onClick={() => onCloseButtonLogic()}>
                         <Close />
                     </IconButton>
                </div>
                <div className={`questionDialogContent`}>
                     <form ref={formRef} className={`questionForm`} onSubmit={(e) => onFormSubmit(e)}>
+                        <div className={`formField`}>
+                            <span className={`formFieldText`}>
+                                Enter Question
+                            </span>
+                            <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} defaultValue={questionToEdit == null ? `` : questionToEdit.question} />
+                        </div>
                         <div className={`selectorFields`}>
                             <div className={`formField formFieldCol`}>
                                 <span className={`formFieldText`}>
                                     Enter Difficulty
                                 </span>    
-                                <Select className={`selectorField difficultySelector`} value={difficulty} onChange={(e) => onDifficultyChange(e)}>
+                                <Select className={`selectorField difficultySelector`} value={difficulty} defaultValue={questionToEdit == null ? difficulty : questionToEdit?.difficulty} onChange={(e) => onDifficultyChange(e)}>
                                     {difficulties?.map((diff, diffI) => (
                                         <MenuItem key={diffI} className={`selectorFieldOption`} value={diff}>
                                             {diff}
@@ -129,7 +170,7 @@ export default function QuestionDialog() {
                                 <span className={`formFieldText`}>
                                     Enter Subject
                                 </span>    
-                                <Select className={`selectorField subjectSelector`} value={subject.name} onChange={(e) => onSubjectChange(e)}>
+                                <Select className={`selectorField subjectSelector`} value={questionToEdit == null ? subject.name : questionToEdit.subject} onChange={(e) => onSubjectChange(e)}>
                                     {subjects?.map((subj, subI) => (
                                         <MenuItem key={subI} className={`selectorFieldOption`} value={subj}>
                                             {subj}
@@ -150,12 +191,7 @@ export default function QuestionDialog() {
                                 </Select>
                             </div>
                         </div>
-                        <div className={`formField`}>
-                            <span className={`formFieldText`}>
-                                Enter Question
-                            </span>
-                            <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} />
-                        </div>
+                        
                         <div className={`formField formFieldCol`}>
                             <span className={`formFieldText`}>
                                 Enter Choices
@@ -165,7 +201,7 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText`}>
                                        A)
                                     </span>
-                                    <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice A`} />
+                                    <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice A`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} />
                                     <Button value={`A`} onClick={() => setAnswer(`A`)} endIcon={answer == `A` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `A` ? `` : `?`}</strong>
                                     </Button>
@@ -174,7 +210,7 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText`}>
                                        B)
                                     </span>
-                                    <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice B`} />
+                                    <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice B`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/>
                                     <Button value={`B`} onClick={() => setAnswer(`B`)} endIcon={answer == `B` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `B` ? `` : `?`}</strong>
                                     </Button>
@@ -185,7 +221,7 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText`}>
                                        C)
                                     </span>
-                                    <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice C`} />
+                                    <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice C`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/>
                                     <Button value={`C`} onClick={() => setAnswer(`C`)} endIcon={answer == `C` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `C` ? `` : `?`}</strong>
                                     </Button>
@@ -194,7 +230,7 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText`}>
                                        D)
                                     </span>
-                                    <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice D`} />
+                                    <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice D`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/>
                                     <Button value={`D`} onClick={() => setAnswer(`D`)} endIcon={answer == `D` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `D` ? `` : `?`}</strong>
                                     </Button>
@@ -202,7 +238,7 @@ export default function QuestionDialog() {
                             </div>
                         </div>
                         <Button className={`questionButton questionButtonAlt`} type={`submit`}>
-                            + Create Question
+                            {questionToEdit == null ? `+ Create` : `Update`} Question
                         </Button>
                     </form>
                </div>

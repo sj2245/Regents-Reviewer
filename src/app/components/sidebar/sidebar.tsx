@@ -1,7 +1,7 @@
-import Nav from "../nav/nav";
-import { useState } from "react";
-import { IconButton } from "@mui/material";
-import { ChevronLeft, ChevronRight } from "@mui/icons-material";
+import Nav from '../nav/nav';
+import { useState } from 'react';
+import { IconButton } from '@mui/material';
+import { ChevronLeft, ChevronRight } from '@mui/icons-material';
 
 export class SidebarProps {
   style: any;
