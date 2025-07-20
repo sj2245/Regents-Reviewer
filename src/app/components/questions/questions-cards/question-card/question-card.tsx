@@ -114,7 +114,7 @@ export default function QuestionCard({ quesIndex, ques }: any) {
             {questionAnswered == `Correct` ? <Check color={`success`} /> : <Close color={`error`} />}
           </div>
           <div className={`ansExplanationField`}>
-            {questionAnswered}! Explanation: '{ques.explanation}'
+            {questionAnswered}! Explanation: {ques.explanation}
           </div>
         </div>
       )}
