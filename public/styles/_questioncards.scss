@@ -10,6 +10,25 @@
   }
 }
 
+.answerExplanationSection {
+  display: flex;
+  grid-gap: 5px;
+  padding: 5px 10px;
+  align-items: center;
+  background: #1f2230;
+  justify-content: center;
+  .ansExplIconContainer {
+    display: flex;
+    min-width: 30px;
+    max-height: 24px;
+    align-items: center;
+    justify-content: center;
+  }
+  .ansExplanationField {
+    font-size: 0.75em;
+  }
+}
+
 .questionCards {
   gap: 35px;
   width: 95%;
@@ -49,6 +68,7 @@
         transition: 150ms ease-in-out;
       }
       .questionTopics {
+        font-size: 0.9em;
         font-style: italic;
       }
     }

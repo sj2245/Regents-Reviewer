@@ -1,15 +1,17 @@
-import { useContext } from 'react';
 import { toast } from 'react-toastify';
+import { useContext, useState } from 'react';
 import { Roles } from '@/app/shared/types/User';
 import { Button, IconButton } from '@mui/material';
 import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
-import { Close, Delete, Edit } from '@mui/icons-material';
+import { Autorenew, Check, Close, Delete, Edit } from '@mui/icons-material';
 import { deleteQuestionFromDB, updateQuestionInDB } from '@/server/firebase';
 
 
 export default function QuestionCard({ quesIndex, ques }: any) {
   let { user, questionToEdit, setQuestionToEdit, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
+
+  let [questionAnswered, setQuestionAnswered] = useState(``);
 
   const cancelEditQuestion = () => {
     setQuestionToEdit(null);
@@ -53,9 +55,11 @@ export default function QuestionCard({ quesIndex, ques }: any) {
     if (isValidAnswer) {
       console.log(`Correct! You answered Question ${quesIndex + 1} Correct!`);
       console.log(`You selected ${choice}, and the correct answer is ${question.answer}`);
+      setQuestionAnswered(`Correct`);
     } else {
       console.log(`Wrong! You got Question ${quesIndex + 1} Wrong!`);
       console.log(`You selected ${choice}, but the correct answer was ${question.answer}`);
+      setQuestionAnswered(`Incorrect`);
     }
     // Fill in this logic later
   }
@@ -76,6 +80,11 @@ export default function QuestionCard({ quesIndex, ques }: any) {
               {/* <IconButton title={`Clone`} className={`cloneButton`} size={`small`} onClick={(e: any) => cloneQuestion(ques)}>
                 <CopyAll style={{ color: `white` }} />  
               </IconButton> */}
+              {questionAnswered != `` && (
+                <IconButton title={`Reset`} className={`resetButton`} size={`small`} onClick={(e: any) => setQuestionAnswered(``)}>
+                  <Autorenew style={{ color: `white` }} />
+                </IconButton>
+              )}
               {questionToEdit != null && questionToEdit.id == ques.id ? (
                 <IconButton title={`Cancel`} className={`cancelEditingButton`} size={`small`} onClick={(e: any) => cancelEditQuestion()}>
                   <Close style={{ color: `white` }} />  
@@ -99,6 +108,16 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           {ques.topics.join(`, `)}
         </div>
       </div>
+      {questionAnswered != `` && (
+        <div className={`answerExplanationSection`}>
+          <div className={`ansExplIconContainer`}>
+            {questionAnswered == `Correct` ? <Check color={`success`} /> : <Close color={`error`} />}
+          </div>
+          <div className={`ansExplanationField`}>
+            {questionAnswered}! Explanation: "{ques.explanation}"
+          </div>
+        </div>
+      )}
       <div className={`questionChoices`}>
         {ques.choices.map((ch: any, chIndex: any) => {
           return (

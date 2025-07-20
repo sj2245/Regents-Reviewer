@@ -84,7 +84,7 @@ export default function QuestionDialog() {
         const formData = new FormData(form);
         let formValues = Object.fromEntries(formData?.entries());
 
-        let { A, B, C, D, question } = formValues;
+        let { A, B, C, D, question, explanation } = formValues;
 
         let choices = [A, B, C, D];
         let filledChoices = choices?.filter(v => v != ``);
@@ -111,14 +111,14 @@ export default function QuestionDialog() {
                 user_email: user?.email,
                 answer: formValues[answer],
                 question: String(question),
-                explanation: `No Explanation Yet`,
+                explanation: (questionToEdit == null || explanation == ``) ? `No Explanation Yet` : String(explanation),
             })
     
             if (questionToEdit == null) {
                 addQuestion(newQuestionToStore);
             } else {
-                let { question, subject, topics, choices, difficulty, answer } = newQuestionToStore;
-                updateQuestionInDB(questionToEdit, { question, subject, topics, choices, difficulty, answer });
+                let { question, subject, topics, choices, difficulty, answer, explanation } = newQuestionToStore;
+                updateQuestionInDB(questionToEdit, { question, subject, topics, choices, difficulty, answer, explanation });
                 setQuestionToEdit(null);
             }
 
@@ -236,6 +236,12 @@ export default function QuestionDialog() {
                                     </Button>
                                 </div>
                             </div>
+                        </div>
+                        <div className={`formField`}>
+                            <span className={`formFieldText`}>
+                                Enter Explanation
+                            </span>
+                            <input name={`explanation`} type={`text`} className={`questionFormField`} placeholder={`Enter Explanation`} defaultValue={questionToEdit == null ? `` : questionToEdit.explanation} />
                         </div>
                         <Button className={`questionButton questionButtonAlt`} type={`submit`}>
                             {questionToEdit == null ? `+ Create` : `Update`} Question
