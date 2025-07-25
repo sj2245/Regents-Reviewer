@@ -59,9 +59,7 @@
   width: 95%;
   display: grid;
   margin: 35px auto;
-  // overflow: auto;
-  // max-height: 800px;
-  grid-template-columns: auto auto;
+  grid-template-columns: repeat(2, 1fr);
   .questionCard {
     border: 5px var(--bg) solid ;
     transition: 150ms ease-in-out;

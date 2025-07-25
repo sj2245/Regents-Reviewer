@@ -32,7 +32,7 @@ export default function PageContainer({
             </Helmet>
         </HelmetProvider>
         {/* Page Content */}
-        {showSidebar ? <Sidebar style={{ maxWidth: sidebarWidth }} expanded={true} /> : <></>}
+        {showSidebar ? <Sidebar style={{ maxWidth: sidebarWidth, minWidth: sidebarWidth }} expanded={true} /> : <></>}
         <main className={`main w100 flex column gap5 spaceBetween alignCenter`}>
             <Header />
             {children}
