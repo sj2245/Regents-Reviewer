@@ -199,18 +199,18 @@ export default function QuestionDialog() {
                            <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
-                                       A)
+                                       1)
                                     </span>
-                                    <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice A`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} />
+                                    <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice 1`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} />
                                     <Button value={`A`} onClick={() => setAnswer(`A`)} endIcon={answer == `A` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `A` ? `` : `?`}</strong>
                                     </Button>
                                 </div>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
-                                       B)
+                                       2)
                                     </span>
-                                    <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice B`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/>
+                                    <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice 2`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/>
                                     <Button value={`B`} onClick={() => setAnswer(`B`)} endIcon={answer == `B` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `B` ? `` : `?`}</strong>
                                     </Button>
@@ -219,18 +219,18 @@ export default function QuestionDialog() {
                             <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
-                                       C)
+                                       3)
                                     </span>
-                                    <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice C`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/>
+                                    <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice 3`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/>
                                     <Button value={`C`} onClick={() => setAnswer(`C`)} endIcon={answer == `C` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `C` ? `` : `?`}</strong>
                                     </Button>
                                 </div>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
-                                       D)
+                                       4)
                                     </span>
-                                    <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice D`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/>
+                                    <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice 4`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/>
                                     <Button value={`D`} onClick={() => setAnswer(`D`)} endIcon={answer == `D` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `D` ? `` : `?`}</strong>
                                     </Button>

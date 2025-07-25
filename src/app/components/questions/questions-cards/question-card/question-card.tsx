@@ -1,7 +1,7 @@
 import { toast } from 'react-toastify';
 import { useContext, useState } from 'react';
 import { Roles } from '@/app/shared/types/User';
-import { Button, IconButton } from '@mui/material';
+import { Badge, Button, IconButton } from '@mui/material';
 import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
 import { Autorenew, Check, Close, Delete, Edit } from '@mui/icons-material';
@@ -121,10 +121,18 @@ export default function QuestionCard({ quesIndex, ques }: any) {
       <div className={`questionChoices`}>
         {ques.choices.map((ch: any, chIndex: any) => {
           return (
-            <Button key={chIndex} className={`choiceButton`} style={{ background: `var(--${ques.difficulty})`, color: `white`, borderRadius: 6 }}
-              onClick={(e: any) => onAnswerClick(ques, ch, quesIndex)}>
-              {ch}
-            </Button>
+            <Badge key={chIndex} className={`questionChoiceIndexBadge`} badgeContent={chIndex + 1} anchorOrigin={{ vertical: `top`, horizontal: `left` }}>
+              <Button className={`choiceButton`} style={{ background: `var(--${ques.difficulty})`, color: `white`, borderRadius: 6 }} onClick={(e: any) => onAnswerClick(ques, ch, quesIndex)}>
+                <div className={`questionChoiceContainer`}>
+                  {/* <span className={`questionChoiceIndex`}>
+                    {chIndex + 1})
+                  </span>  */}
+                  <span className={`questionChoice`}>
+                    {ch}
+                  </span>
+                </div>
+              </Button>
+            </Badge>
           )
         })}
       </div>

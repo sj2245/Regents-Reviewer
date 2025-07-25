@@ -80,7 +80,15 @@
     grid-gap: 15px;
     align-items: center;
     flex-direction: column;
+    container-type: inline-size;
     justify-content: space-between;
+    @container (max-width: 560px) {
+        .formFieldCol {
+            .formFieldGroup {
+                flex-direction: column;
+            }
+        }
+    }
 }
 
 .formField {

@@ -29,6 +29,31 @@
   }
 }
 
+.questionChoiceContainer {
+  width: 100%;
+  display: flex;
+  grid-gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+
+.questionChoiceIndex {
+  color: var(--bg);
+  font-weight: 900;
+  font-size: 0.85em;
+  font-style: normal;
+}
+
+.questionChoiceIndexBadge {
+  .MuiBadge-badge {
+    padding: 7px;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    background: var(--bg);
+  }
+}
+
 .questionCards {
   gap: 35px;
   width: 95%;
