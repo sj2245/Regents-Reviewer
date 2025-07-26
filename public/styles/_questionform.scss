@@ -73,6 +73,32 @@
     }
 }
 
+.imageTypeSelector {
+    width: 100%;
+    border: none;
+    outline: none;
+    max-height: 38px;
+}
+
+.imageTypeSelectorButton {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    font-weight: bolder;
+    background: var(--cardBg);
+    color: white !important;
+    font-family: var(--font) !important;
+    &.Mui-selected {
+        background: var(--bg);
+    }
+    &:hover {
+        background: var(--bg);
+        &.Mui-selected {
+            background: var(--cardBg);
+        }
+    }
+}
+
 .questionForm {
     width: 100%;
     height: 100%;

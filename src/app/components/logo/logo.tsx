@@ -1,5 +1,5 @@
-import Image from "next/image";
-import { brandName, logoURL } from "@/app/shared/shared";
+import Image from 'next/image';
+import { brandName, logoURL } from '@/app/shared/shared';
 
 export type LogoOptions = {
     src?: string;

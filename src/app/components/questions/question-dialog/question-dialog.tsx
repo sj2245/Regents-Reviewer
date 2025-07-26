@@ -5,7 +5,12 @@ import { Question } from '@/app/shared/types/Question';
 import { useContext, useEffect, useRef, useState } from 'react';
 import { Difficulties, Subjects } from '@/app/shared/types/questionTypes';
 import { addQuestion, generateDatabaseMetaData, updateQuestionInDB } from '@/server/firebase';
-import { Button, Dialog, IconButton, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { Button, Dialog, IconButton, MenuItem, Select, SelectChangeEvent, ToggleButton, ToggleButtonGroup } from '@mui/material';
+
+export enum ImageTypes {
+    imageURL = `imageURL`,
+    uploadImage = `uploadImage`,
+}
 
 export default function QuestionDialog() {
     let { user, questions, questionDialogOpen, setQuestionDialogOpen, setQuestionToEdit, questionToEdit} = useContext<any>(SharedDatabase);
@@ -19,6 +24,7 @@ export default function QuestionDialog() {
     let [topics, setTopics] = useState(questionToEdit == null ? subject.topics.slice(0, 2) : questionToEdit?.topics);
     let [difficulties, setDifficulties] = useState(Object.values(Difficulties));
     let [subjects, setSubjects] = useState(subjectsArr?.map(s => s?.name));
+    let [imageType, setImageType] = useState<ImageTypes>(ImageTypes.imageURL);
 
     const setDefault = () => {
         setAnswer(`A`);
@@ -75,6 +81,11 @@ export default function QuestionDialog() {
         const { target: { value } } = e;
         let topicsToSet: any = typeof value === `string` ? value?.split(`,`) : value;
         setTopics(topicsToSet);
+    }
+
+    const onImageTypeChange = (e: any) => {
+        let imageTypeValue = e?.target?.value;
+        setImageType(imageTypeValue);
     }
 
     const onFormSubmit = (onFormSubmitEvent: any) => {
@@ -196,6 +207,7 @@ export default function QuestionDialog() {
                             <span className={`formFieldText`}>
                                 Enter Choices
                             </span>
+
                            <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
@@ -216,7 +228,8 @@ export default function QuestionDialog() {
                                     </Button>
                                 </div>
                            </div>
-                            <div className={`formFieldGroup`}>
+
+                           <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
                                     <span className={`formFieldText`}>
                                        3)
@@ -237,12 +250,39 @@ export default function QuestionDialog() {
                                 </div>
                             </div>
                         </div>
+
                         <div className={`formField`}>
                             <span className={`formFieldText`}>
                                 Enter Explanation
                             </span>
                             <input name={`explanation`} type={`text`} className={`questionFormField`} placeholder={`Enter Explanation`} defaultValue={questionToEdit == null ? `` : questionToEdit.explanation} />
                         </div>
+
+                        {/* <ToggleButtonGroup className={`imageTypeSelector`} exclusive value={imageType} onChange={(e) => onImageTypeChange(e)}>
+                            <ToggleButton className={`imageTypeSelectorButton`} value={ImageTypes.imageURL}>
+                                Image URL
+                            </ToggleButton>
+                            <ToggleButton className={`imageTypeSelectorButton`} value={ImageTypes.uploadImage}>
+                                Upload Image
+                            </ToggleButton>
+                        </ToggleButtonGroup>
+
+                        {imageType == ImageTypes.imageURL ? (
+                            <div className={`formField`}>
+                                <span className={`formFieldText`}>
+                                    Image URL
+                                </span>
+                                <input name={ImageTypes.imageURL} type={`text`} className={`questionFormField`} placeholder={`Enter Image URL`} defaultValue={questionToEdit == null ? `` : questionToEdit.image} />
+                            </div>
+                        ) : (
+                            <div className={`formField`}>
+                                <span className={`formFieldText`}>
+                                    Upload Image
+                                </span>
+                                <input name={ImageTypes.uploadImage} type={`text`} className={`questionFormField`} placeholder={`Upload Image`} />
+                            </div>
+                        )} */}
+
                         <Button className={`questionButton questionButtonAlt`} type={`submit`}>
                             {questionToEdit == null ? `+ Create` : `Update`} Question
                         </Button>

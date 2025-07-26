@@ -8,6 +8,7 @@ export class Question {
     topics: string[],
     user_email?: any;
     question: string,
+    images?: string[],
     difficulty: string,
     explanation: string,
     answer: string | number | any,
