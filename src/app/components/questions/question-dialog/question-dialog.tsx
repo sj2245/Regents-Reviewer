@@ -1,12 +1,13 @@
+import moment from 'moment';
 import { toast } from 'react-toastify';
+import RichTextEditor from '../../editor/editor';
 import { Check, Close } from '@mui/icons-material';
-import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
 import { useContext, useEffect, useRef, useState } from 'react';
+import { SharedDatabase, timeFormats } from '@/app/shared/shared';
 import { Difficulties, Subjects } from '@/app/shared/types/questionTypes';
 import { addQuestion, generateDatabaseMetaData, updateQuestionInDB } from '@/server/firebase';
 import { Button, Dialog, IconButton, MenuItem, Select, SelectChangeEvent, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import RichTextEditor from '../../editor/editor';
 
 export enum ImageTypes {
     imageURL = `imageURL`,
@@ -19,6 +20,7 @@ export default function QuestionDialog() {
     let formRef = useRef(null);
 
     let subjectsArr = Object.values(Subjects);
+    // let [explanation, setExplanation] = useState(questionToEdit == null ? `` : questionToEdit?.explanation);
     let [questionContent, setQuestionContent] = useState(questionToEdit == null ? `` : questionToEdit?.question);
     let [difficulty, setDifficulty] = useState(questionToEdit == null ? Difficulties.Easy : questionToEdit.difficulty);
     let [answer, setAnswer] = useState(questionToEdit == null ? `A` : questionToEdit.choices[0]);
@@ -91,7 +93,6 @@ export default function QuestionDialog() {
     }
 
     const onEditorChanges = (onEditorChangeValue: any) => {
-        console.log(`onEditorChangeValue`, onEditorChangeValue);
         setQuestionContent(onEditorChangeValue);
     }
 
@@ -114,6 +115,9 @@ export default function QuestionDialog() {
             questionIDs?.sort()?.reverse();
     
             let nextQuestionNumber = questionIDs[0] + 1;
+            if (isNaN(nextQuestionNumber)) {
+                nextQuestionNumber = questions.length;
+            }
     
             let metaData = generateDatabaseMetaData(`Question`, nextQuestionNumber);
             let { uuid, uniqueID } = metaData;
@@ -128,8 +132,9 @@ export default function QuestionDialog() {
                 subject: subject?.name,
                 user_email: user?.email,
                 answer: formValues[answer],
+                updated: moment().format(timeFormats.seconds),
                 question: question ? String(question) : questionContent,
-                explanation: (questionToEdit == null || explanation == ``) ? `No Explanation Yet` : String(explanation),
+                explanation: explanation == `` ? `No Explanation Yet` : String(explanation),
             })
     
             if (questionToEdit == null) {

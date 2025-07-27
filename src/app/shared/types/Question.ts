@@ -11,6 +11,7 @@ export class Question {
     images?: string[],
     difficulty: string,
     explanation: string,
+    updated?: string | Date,
     answer: string | number | any,
     choices: string[] | number[] | any[],
   }) {

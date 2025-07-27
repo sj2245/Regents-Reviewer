@@ -1,17 +1,23 @@
 'use client';
 
-import { User } from "./types/User";
-import React, { useEffect } from "react";
-import { Question } from "./types/Question";
-import { createContext, useState } from "react";
-import { collection, onSnapshot } from "firebase/firestore";
-import { db, questionsDatabaseCollection, usersDatabaseCollection } from "@/server/firebase";
+import moment from 'moment';
+import { User } from './types/User';
+import React, { useEffect } from 'react';
+import { Question } from './types/Question';
+import { createContext, useState } from 'react';
+import { collection, onSnapshot } from 'firebase/firestore';
+import { db, questionsDatabaseCollection, usersDatabaseCollection } from '@/server/firebase';
 
 export const SharedDatabase = createContext({});
 
 export const brandName = `Regents Reviewer`;
 export const logoURL = `/images/logos/QuizListLogo.svg`;
 export const description = `${brandName} is an app to make and take quizzes.`;
+
+export const timeFormats = {
+  seconds: `hh:mm:ss A MM/DD/YY `,
+  milliseconds: `hh:mm:ss:SSS A`,
+}
 
 export default function SharedData({ children }: { children: React.ReactNode; }) {
 
@@ -70,8 +76,13 @@ export default function SharedData({ children }: { children: React.ReactNode; })
         setQuestionsLoading(true);
         const questionsFromDB: Question[] = [];
         snapshot.forEach((doc) => questionsFromDB.push(new Question({ ...doc.data() as any }) as Question));
-        console.log(`Update from ${questionsDatabaseCollection} Firebase`, questionsFromDB);
-        setQuestions(questionsFromDB);
+        const sortedQuestionsFromDB = questionsFromDB?.sort((a: Question, b: Question) => {
+          const ta = moment(a.updated, timeFormats.seconds);
+          const tb = moment(b.updated, timeFormats.seconds);
+          return tb.valueOf() - ta.valueOf();
+        })
+        console.log(`Update from ${questionsDatabaseCollection} Firebase`, sortedQuestionsFromDB);
+        setQuestions(sortedQuestionsFromDB);
         setQuestionsLoading(false);
       }, error => {
         console.log(`Error getting from ${questionsDatabaseCollection} Firebase`, error);
