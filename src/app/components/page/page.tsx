@@ -1,14 +1,15 @@
 'use client';
 
-import "react-toastify/dist/ReactToastify.css";
+import 'katex/dist/katex.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
-import Footer from "../footer/footer";
-import Header from "../header/header";
-import { ToastContainer } from "react-toastify";
-import Sidebar, { sidebarWidth } from "../sidebar/sidebar";
+import Footer from '../footer/footer';
+import Header from '../header/header';
+import { ToastContainer } from 'react-toastify';
+import Sidebar, { sidebarWidth } from '../sidebar/sidebar';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { brandName, logoURL, description } from "@/app/shared/shared";
-import QuestionDialog from "../questions/question-dialog/question-dialog";
+import { brandName, logoURL, description } from '@/app/shared/shared';
+import QuestionDialog from '../questions/question-dialog/question-dialog';
 
 export default function PageContainer({ 
     title,

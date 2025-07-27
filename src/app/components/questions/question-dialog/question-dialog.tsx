@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { Difficulties, Subjects } from '@/app/shared/types/questionTypes';
 import { addQuestion, generateDatabaseMetaData, updateQuestionInDB } from '@/server/firebase';
 import { Button, Dialog, IconButton, MenuItem, Select, SelectChangeEvent, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import RichTextEditor from '../../editor/editor';
 
 export enum ImageTypes {
     imageURL = `imageURL`,
@@ -160,6 +161,7 @@ export default function QuestionDialog() {
                             <span className={`formFieldText`}>
                                 Enter Question
                             </span>
+                            {/* <RichTextEditor /> */}
                             <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} defaultValue={questionToEdit == null ? `` : questionToEdit.question} />
                         </div>
                         <div className={`selectorFields`}>
