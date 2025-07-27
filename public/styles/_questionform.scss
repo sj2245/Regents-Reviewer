@@ -7,14 +7,22 @@
     min-height: 38px;
 }
 
+.formFieldChoiceIndex {
+    min-width: 17px !important;
+}
+
 .richTextEditorComponent {
     width: 100%;
     .richTextEditorField {
         border-radius: 6px;
-        background: var(--darkMain);
         font-family: var(--font) !important;
         min-height: var(--inputFieldHeight);
         max-height: var(--inputFieldHeight);
+        &.readOnly {
+            .tiptap {
+                padding: 0;
+            }
+        }
         .tiptap {
             width: 100%;
             display: flex;

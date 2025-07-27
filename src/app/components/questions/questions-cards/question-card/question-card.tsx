@@ -6,6 +6,7 @@ import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
 import { Autorenew, Check, Close, Delete, Edit } from '@mui/icons-material';
 import { deleteQuestionFromDB, updateQuestionInDB } from '@/server/firebase';
+import RichTextEditor from '@/app/components/editor/editor';
 
 
 export default function QuestionCard({ quesIndex, ques }: any) {
@@ -101,9 +102,12 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           ) : <></>}
 
         </div>
-        <div className={`question`} contentEditable={questionToEdit != null && questionToEdit.id == ques.id} suppressContentEditableWarning spellCheck={false} onBlur={(e) => onTextEditDone(e)}>
-          {ques.question}
+        <div className={`question`}>
+          <RichTextEditor readOnly startingContent={ques.question} background={`transparent`} />
         </div>
+        {/* <div className={`question`} contentEditable={questionToEdit != null && questionToEdit.id == ques.id} suppressContentEditableWarning spellCheck={false} onBlur={(e) => onTextEditDone(e)}>
+          {ques.question}
+        </div> */}
         <div className={`questionTopics`}>
           {ques.topics.join(`, `)}
         </div>

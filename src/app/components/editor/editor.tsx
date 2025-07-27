@@ -9,7 +9,12 @@ import CodeBlockLowLight from '@tiptap/extension-code-block-lowlight';
 
 const lowlight = createLowlight(common);
 
-export default function RichTextEditor() {
+export default function RichTextEditor({
+    readOnly = false,
+    startingContent = ``,
+    background = `var(--darkMain)`, 
+    onEditorChange = (content?: any) => {}, 
+}) {
     const [loading, setLoading] = useState(true);
     const [htmlToRender, setHtmlToRender] = useState(``);
 
@@ -18,10 +23,12 @@ export default function RichTextEditor() {
     }, [])
 
     const editor = useEditor({
-        content: ``,
+        editable: !readOnly,
+        content: startingContent,
         immediatelyRender: false,
         onUpdate: ({ editor }) => {
             let htmlContent = editor?.getHTML();
+            onEditorChange(htmlContent);
             setHtmlToRender(htmlContent);
         },
         extensions: [
@@ -39,7 +46,11 @@ export default function RichTextEditor() {
 
     return (
         <div className={`richTextEditorComponent`}>
-            <EditorContent editor={editor} className={`richTextEditorField`} />
+            <EditorContent 
+                editor={editor} 
+                style={{ background }}
+                className={`richTextEditorField ${readOnly ? `readOnly` : ``}`} 
+            />
             {/* {loading == false && (
                 <div 
                     dangerouslySetInnerHTML={{ __html: htmlToRender }}

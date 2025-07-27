@@ -19,6 +19,7 @@ export default function QuestionDialog() {
     let formRef = useRef(null);
 
     let subjectsArr = Object.values(Subjects);
+    let [questionContent, setQuestionContent] = useState(questionToEdit == null ? `` : questionToEdit?.question);
     let [difficulty, setDifficulty] = useState(questionToEdit == null ? Difficulties.Easy : questionToEdit.difficulty);
     let [answer, setAnswer] = useState(questionToEdit == null ? `A` : questionToEdit.choices[0]);
     let [subject, setSubject] = useState<any>(questionToEdit == null ? Subjects.Math : subjectsArr?.find(subj => subj.name == questionToEdit.subject));
@@ -89,6 +90,11 @@ export default function QuestionDialog() {
         setImageType(imageTypeValue);
     }
 
+    const onEditorChanges = (onEditorChangeValue: any) => {
+        console.log(`onEditorChangeValue`, onEditorChangeValue);
+        setQuestionContent(onEditorChangeValue);
+    }
+
     const onFormSubmit = (onFormSubmitEvent: any) => {
         onFormSubmitEvent?.preventDefault();
 
@@ -122,7 +128,7 @@ export default function QuestionDialog() {
                 subject: subject?.name,
                 user_email: user?.email,
                 answer: formValues[answer],
-                question: String(question),
+                question: question ? String(question) : questionContent,
                 explanation: (questionToEdit == null || explanation == ``) ? `No Explanation Yet` : String(explanation),
             })
     
@@ -161,8 +167,8 @@ export default function QuestionDialog() {
                             <span className={`formFieldText`}>
                                 Enter Question
                             </span>
-                            {/* <RichTextEditor /> */}
-                            <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} defaultValue={questionToEdit == null ? `` : questionToEdit.question} />
+                            <RichTextEditor onEditorChange={editorChangeValue => onEditorChanges(editorChangeValue)} />
+                            {/* <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} defaultValue={questionToEdit == null ? `` : questionToEdit.question} /> */}
                         </div>
                         <div className={`selectorFields`}>
                             <div className={`formField formFieldCol`}>
@@ -212,7 +218,7 @@ export default function QuestionDialog() {
 
                            <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
-                                    <span className={`formFieldText`}>
+                                    <span className={`formFieldText formFieldChoiceIndex`}>
                                        1)
                                     </span>
                                     <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice 1`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} />
@@ -221,7 +227,7 @@ export default function QuestionDialog() {
                                     </Button>
                                 </div>
                                 <div className={`formField`}>
-                                    <span className={`formFieldText`}>
+                                    <span className={`formFieldText formFieldChoiceIndex`}>
                                        2)
                                     </span>
                                     <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice 2`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/>
@@ -233,7 +239,7 @@ export default function QuestionDialog() {
 
                            <div className={`formFieldGroup`}>
                                 <div className={`formField`}>
-                                    <span className={`formFieldText`}>
+                                    <span className={`formFieldText formFieldChoiceIndex`}>
                                        3)
                                     </span>
                                     <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice 3`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/>
@@ -242,7 +248,7 @@ export default function QuestionDialog() {
                                     </Button>
                                 </div>
                                 <div className={`formField`}>
-                                    <span className={`formFieldText`}>
+                                    <span className={`formFieldText formFieldChoiceIndex`}>
                                        4)
                                     </span>
                                     <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice 4`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/>
