@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import StarterKit from '@tiptap/starter-kit';
 import { common, createLowlight } from 'lowlight';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -14,13 +14,9 @@ export default function RichTextEditor({
     startingContent = ``,
     background = `var(--darkMain)`, 
     onEditorChange = (content?: any) => {}, 
+    placeholder = `Enter Question - Example: $E=mc^2$`,
 }) {
-    const [loading, setLoading] = useState(true);
     const [htmlToRender, setHtmlToRender] = useState(``);
-
-    useEffect(() => {
-        setLoading(false);
-    }, [])
 
     const editor = useEditor({
         editable: !readOnly,
@@ -39,7 +35,7 @@ export default function RichTextEditor({
                 // optional: inlineOptions
             }),
             Placeholder.configure({
-                placeholder: `Enter Question - Example: $E=mc^2$`
+                placeholder,
             }),
         ],
     })
@@ -49,14 +45,9 @@ export default function RichTextEditor({
             <EditorContent 
                 editor={editor} 
                 style={{ background }}
+                placeholder={placeholder}
                 className={`richTextEditorField ${readOnly ? `readOnly` : ``}`} 
             />
-            {/* {loading == false && (
-                <div 
-                    dangerouslySetInnerHTML={{ __html: htmlToRender }}
-                    className={`richTextEditorPreview prose prose-sm`} 
-                ></div>
-            )} */}
         </div>
     )
 }

@@ -1,18 +1,48 @@
+'use client';
+
 import { toast } from 'react-toastify';
-import { useContext, useState } from 'react';
 import { Roles } from '@/app/shared/types/User';
-import { Badge, Button, IconButton } from '@mui/material';
 import { SharedDatabase } from '@/app/shared/shared';
 import { Question } from '@/app/shared/types/Question';
+import { Badge, Button, IconButton } from '@mui/material';
+import renderMathInElement from 'katex/contrib/auto-render';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { Autorenew, Check, Close, Delete, Edit } from '@mui/icons-material';
 import { deleteQuestionFromDB, updateQuestionInDB } from '@/server/firebase';
-import RichTextEditor from '@/app/components/editor/editor';
 
 
 export default function QuestionCard({ quesIndex, ques }: any) {
+  const questionRef = useRef(null);
+
   let { user, questionToEdit, setQuestionToEdit, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
 
+  let [loading, setLoading] = useState(true);
   let [questionAnswered, setQuestionAnswered] = useState(``);
+
+  useEffect(() => {
+    setLoading(false);
+  }, [])
+
+  useEffect(() => {
+    const node = questionRef.current;
+    if (!node) return;
+
+    const render = () => {
+      renderMathInElement(node, {
+        delimiters: [
+          { left: `$$`, right: `$$`, display: false },
+          { left: `$`, right: `$`, display: false }
+        ],
+      });
+    };
+
+    render();
+
+    const observer = new MutationObserver(() => render());
+    observer.observe(node, { childList: true, subtree: true });
+
+    return () => observer.disconnect();
+  }, []);
 
   const cancelEditQuestion = () => {
     setQuestionToEdit(null);
@@ -102,12 +132,13 @@ export default function QuestionCard({ quesIndex, ques }: any) {
           ) : <></>}
 
         </div>
-        <div className={`question`}>
-          <RichTextEditor readOnly startingContent={ques.question} background={`transparent`} />
+        <div ref={questionRef} className={`question`}>
+          {/* <RichTextEditor readOnly startingContent={ques.question} background={`transparent`} /> */}
+          <div 
+            dangerouslySetInnerHTML={{ __html: ques.question }}
+            className={`richTextEditorPreview prose prose-sm`} 
+          ></div>
         </div>
-        {/* <div className={`question`} contentEditable={questionToEdit != null && questionToEdit.id == ques.id} suppressContentEditableWarning spellCheck={false} onBlur={(e) => onTextEditDone(e)}>
-          {ques.question}
-        </div> */}
         <div className={`questionTopics`}>
           {ques.topics.join(`, `)}
         </div>

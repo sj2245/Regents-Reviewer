@@ -4,7 +4,12 @@
 
 .richTextEditorPreview {
     height: 100%;
-    min-height: 38px;
+    &.inEditor {
+        min-height: 38px;
+    }
+    p {
+        margin: 0;
+    }
 }
 
 .formFieldChoiceIndex {
@@ -136,6 +141,10 @@
             background: var(--cardBg);
         }
     }
+}
+
+.explanationField {
+    font-size: 16px;
 }
 
 .questionForm {

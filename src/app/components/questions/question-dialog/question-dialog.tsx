@@ -21,6 +21,17 @@ export default function QuestionDialog() {
 
     let subjectsArr = Object.values(Subjects);
     // let [explanation, setExplanation] = useState(questionToEdit == null ? `` : questionToEdit?.explanation);
+    let [questionChoices, setQuestionChoices] = useState(questionToEdit == null ? {
+        A: ``,
+        B: ``,
+        C: ``,
+        D: ``,
+    } : {
+        A: questionToEdit?.choices[0],
+        B: questionToEdit?.choices[1],
+        C: questionToEdit?.choices[2],
+        D: questionToEdit?.choices[3],
+    });
     let [questionContent, setQuestionContent] = useState(questionToEdit == null ? `` : questionToEdit?.question);
     let [difficulty, setDifficulty] = useState(questionToEdit == null ? Difficulties.Easy : questionToEdit.difficulty);
     let [answer, setAnswer] = useState(questionToEdit == null ? `A` : questionToEdit.choices[0]);
@@ -44,9 +55,10 @@ export default function QuestionDialog() {
             setDifficulty(questionToEdit.difficulty);
             setSubject(subjectsArr?.find(subj => subj.name == questionToEdit.subject));
             setTopics(questionToEdit?.topics ?? subject?.topics?.slice(0, 1));
-
+            
             let [A, B, C, D] = questionToEdit?.choices;
             let choices = { A, B, C, D };
+            setQuestionChoices({ A, B, C, D })
             let choiceEntries = Object.entries(choices);
             let answerChoice = choiceEntries.filter(ce => ce[1] == questionToEdit.answer);
             let answr = answerChoice[0][0];
@@ -96,6 +108,10 @@ export default function QuestionDialog() {
         setQuestionContent(onEditorChangeValue);
     }
 
+    const onAnswerChanges = (key: string, onEditorChangeValue: any) => {
+        setQuestionChoices(prevChoices => ({ ...prevChoices, [key]: onEditorChangeValue }));
+    }
+
     const onFormSubmit = (onFormSubmitEvent: any) => {
         onFormSubmitEvent?.preventDefault();
 
@@ -105,7 +121,13 @@ export default function QuestionDialog() {
 
         let { A, B, C, D, question, explanation } = formValues;
 
-        let choices = [A, B, C, D];
+        let choices = [
+            A ?? questionChoices.A, 
+            B ?? questionChoices.B, 
+            C ?? questionChoices.C, 
+            D ?? questionChoices.D,
+        ];
+
         let filledChoices = choices?.filter(v => v != ``);
 
         let formIsValid = question != `` && filledChoices?.length >= 4;
@@ -138,8 +160,10 @@ export default function QuestionDialog() {
             })
     
             if (questionToEdit == null) {
+                console.log(`New Question`, newQuestionToStore);
                 addQuestion(newQuestionToStore);
             } else {
+                console.log(`Updated Question`, newQuestionToStore);
                 let { question, subject, topics, choices, difficulty, answer, explanation } = newQuestionToStore;
                 updateQuestionInDB(questionToEdit, { question, subject, topics, choices, difficulty, answer, explanation });
                 setQuestionToEdit(null);
@@ -172,7 +196,7 @@ export default function QuestionDialog() {
                             <span className={`formFieldText`}>
                                 Enter Question
                             </span>
-                            <RichTextEditor onEditorChange={editorChangeValue => onEditorChanges(editorChangeValue)} />
+                            <RichTextEditor startingContent={questionToEdit != null ? questionToEdit?.question : ``} onEditorChange={editorChangeValue => onEditorChanges(editorChangeValue)} />
                             {/* <input name={`question`} type={`text`} className={`questionFormField`} placeholder={`Enter Question`} defaultValue={questionToEdit == null ? `` : questionToEdit.question} /> */}
                         </div>
                         <div className={`selectorFields`}>
@@ -226,7 +250,8 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText formFieldChoiceIndex`}>
                                        1)
                                     </span>
-                                    <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice 1`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} />
+                                    {/* <input name={`A`} className={`choiceAField`} type={`text`} placeholder={`Choice 1`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[0]} /> */}
+                                    <RichTextEditor startingContent={questionToEdit != null ? questionToEdit?.choices[0] : ``} onEditorChange={editorChangeValue => onAnswerChanges(`A`, editorChangeValue)} />
                                     <Button value={`A`} onClick={() => setAnswer(`A`)} endIcon={answer == `A` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `A` ? `` : `?`}</strong>
                                     </Button>
@@ -235,7 +260,8 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText formFieldChoiceIndex`}>
                                        2)
                                     </span>
-                                    <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice 2`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/>
+                                    {/* <input name={`B`} className={`choiceBField`} type={`text`} placeholder={`Choice 2`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[1]}/> */}
+                                    <RichTextEditor startingContent={questionToEdit != null ? questionToEdit?.choices[1] : ``} onEditorChange={editorChangeValue => onAnswerChanges(`B`, editorChangeValue)} />
                                     <Button value={`B`} onClick={() => setAnswer(`B`)} endIcon={answer == `B` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `B` ? `` : `?`}</strong>
                                     </Button>
@@ -247,7 +273,8 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText formFieldChoiceIndex`}>
                                        3)
                                     </span>
-                                    <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice 3`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/>
+                                    {/* <input name={`C`} className={`choiceCField`} type={`text`} placeholder={`Choice 3`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[2]}/> */}
+                                    <RichTextEditor startingContent={questionToEdit != null ? questionToEdit?.choices[2] : ``} onEditorChange={editorChangeValue => onAnswerChanges(`C`, editorChangeValue)} />
                                     <Button value={`C`} onClick={() => setAnswer(`C`)} endIcon={answer == `C` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `C` ? `` : `?`}</strong>
                                     </Button>
@@ -256,7 +283,8 @@ export default function QuestionDialog() {
                                     <span className={`formFieldText formFieldChoiceIndex`}>
                                        4)
                                     </span>
-                                    <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice 4`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/>
+                                    {/* <input name={`D`} className={`choiceDField`} type={`text`} placeholder={`Choice 4`} defaultValue = {questionToEdit == null ? `` : questionToEdit.choices[3]}/> */}
+                                    <RichTextEditor startingContent={questionToEdit != null ? questionToEdit?.choices[3] : ``} onEditorChange={editorChangeValue => onAnswerChanges(`D`, editorChangeValue)} />
                                     <Button value={`D`} onClick={() => setAnswer(`D`)} endIcon={answer == `D` ? <Check className={`checkIcon`} /> : undefined} className={`questionButton questionButtonAlt`}>
                                         <strong>Correct{answer == `D` ? `` : `?`}</strong>
                                     </Button>
@@ -268,7 +296,7 @@ export default function QuestionDialog() {
                             <span className={`formFieldText`}>
                                 Enter Explanation
                             </span>
-                            <input name={`explanation`} type={`text`} className={`questionFormField`} placeholder={`Enter Explanation`} defaultValue={questionToEdit == null ? `` : questionToEdit.explanation} />
+                            <input name={`explanation`} type={`text`} className={`questionFormField explanationField`} placeholder={`Enter Explanation`} defaultValue={questionToEdit == null ? `` : questionToEdit.explanation} />
                         </div>
 
                         {/* <ToggleButtonGroup className={`imageTypeSelector`} exclusive value={imageType} onChange={(e) => onImageTypeChange(e)}>

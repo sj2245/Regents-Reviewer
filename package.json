@@ -31,6 +31,7 @@
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "firebase": "^10.13.1",
+    "katex": "^0.16.22",
     "lodash": "4.17.21",
     "lowlight": "^3.3.0",
     "moment": "^2.30.1",

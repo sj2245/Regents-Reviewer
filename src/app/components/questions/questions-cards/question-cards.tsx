@@ -10,8 +10,10 @@ import LoadingSpinner from '../../loader/loading-spinner';
 
 export default function QuestionCards() {
   let { user, questions, questionsLoading, questionDialogOpen, setQuestionDialogOpen } = useContext<any>(SharedDatabase);
+
   // Whenever we map over something, we need to include a Key property
   // Also include a return
+
   return <>
    {(user != null && user.level >= Roles.Quiz_Maker.level) && !questionsLoading && (
       <div className={`questionsTopContent`}>
